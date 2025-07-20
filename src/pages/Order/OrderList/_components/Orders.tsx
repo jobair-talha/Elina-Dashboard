@@ -12,18 +12,17 @@ import { Link } from "react-router";
 
 // Define the TypeScript interface for the table rows
 interface Product {
-  id: number; // Unique identifier for each product
-  name: string; // Product name
-  variants: string; // Number of variants (e.g., "1 Variant", "2 Variants")
-  category: string; // Category of the product
-  price: string; // Price of the product (as a string with currency symbol)
-  // status: string; // Status of the product
-  image: string; // URL or path to the product image
-  status: "Delivered" | "Pending" | "Canceled"; // Status of the product
+  id: number;
+  name: string;
+  variants: string;
+  category: string;
+  price: string;
+  image: string;
+  status: "Delivered" | "Pending" | "Canceled";
 }
 
 // Define the table data using the interface
-const tableData: Produc[] = [
+const tableData: Product[] = [
   {
     id: 1,
     name: "MacBook Pro 13”",
@@ -31,7 +30,7 @@ const tableData: Produc[] = [
     category: "Laptop",
     price: "$2399.00",
     status: "Delivered",
-    image: "/images/product/product-01.jpg", // Replace with actual image URL
+    image: "/images/product/product-01.jpg",
   },
   {
     id: 2,
@@ -40,7 +39,7 @@ const tableData: Produc[] = [
     category: "Watch",
     price: "$879.00",
     status: "Pending",
-    image: "/images/product/product-02.jpg", // Replace with actual image URL
+    image: "/images/product/product-02.jpg",
   },
   {
     id: 3,
@@ -49,7 +48,7 @@ const tableData: Produc[] = [
     category: "SmartPhone",
     price: "$1869.00",
     status: "Delivered",
-    image: "/images/product/product-03.jpg", // Replace with actual image URL
+    image: "/images/product/product-03.jpg",
   },
   {
     id: 4,
@@ -58,7 +57,7 @@ const tableData: Produc[] = [
     category: "Electronics",
     price: "$1699.00",
     status: "Canceled",
-    image: "/images/product/product-04.jpg", // Replace with actual image URL
+    image: "/images/product/product-04.jpg",
   },
   {
     id: 5,
@@ -67,14 +66,14 @@ const tableData: Produc[] = [
     category: "Accessories",
     price: "$240.00",
     status: "Delivered",
-    image: "/images/product/product-05.jpg", // Replace with actual image URL
+    image: "/images/product/product-05.jpg",
   },
 ];
 
 export default function Orders() {
   return (
     <>
-      {/* Fileters */}
+      {/* Filters */}
       <div className="flex flex-col gap-2 mb-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <button className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-theme-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
@@ -87,29 +86,21 @@ export default function Orders() {
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                d="M2.29004 5.90393H17.7067"
-                stroke=""
+                d="M2.29 5.904H17.707"
                 strokeWidth="1.5"
                 strokeLinecap="round"
-                strokeLinejoin="round"
               />
               <path
-                d="M17.7075 14.0961H2.29085"
-                stroke=""
+                d="M17.708 14.096H2.291"
                 strokeWidth="1.5"
                 strokeLinecap="round"
-                strokeLinejoin="round"
               />
               <path
-                d="M12.0826 3.33331C13.5024 3.33331 14.6534 4.48431 14.6534 5.90414C14.6534 7.32398 13.5024 8.47498 12.0826 8.47498C10.6627 8.47498 9.51172 7.32398 9.51172 5.90415C9.51172 4.48432 10.6627 3.33331 12.0826 3.33331Z"
-                fill=""
-                stroke=""
+                d="M12.083 3.333c1.42 0 2.571 1.151 2.571 2.571s-1.151 2.571-2.571 2.571-2.571-1.151-2.571-2.571 1.151-2.571 2.571-2.571Z"
                 strokeWidth="1.5"
               />
               <path
-                d="M7.91745 11.525C6.49762 11.525 5.34662 12.676 5.34662 14.0959C5.34661 15.5157 6.49762 16.6667 7.91745 16.6667C9.33728 16.6667 10.4883 15.5157 10.4883 14.0959C10.4883 12.676 9.33728 11.525 7.91745 11.525Z"
-                fill=""
-                stroke=""
+                d="M7.917 11.525c-1.42 0-2.571 1.151-2.571 2.571s1.151 2.571 2.571 2.571 2.571-1.151 2.571-2.571-1.151-2.571-2.571-2.571Z"
                 strokeWidth="1.5"
               />
             </svg>
@@ -120,117 +111,112 @@ export default function Orders() {
         <div className="flex items-center gap-3">
           <Form>
             <div className="relative">
-              <span className="absolute -translate-y-1/2 pointer-events-none top-1/2 left-4">
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none">
                 <svg
                   className="fill-gray-500 dark:fill-gray-400"
                   width="20"
                   height="20"
                   viewBox="0 0 20 20"
                   fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
                     fillRule="evenodd"
                     clipRule="evenodd"
-                    d="M3.04199 9.37381C3.04199 5.87712 5.87735 3.04218 9.37533 3.04218C12.8733 3.04218 15.7087 5.87712 15.7087 9.37381C15.7087 12.8705 12.8733 15.7055 9.37533 15.7055C5.87735 15.7055 3.04199 12.8705 3.04199 9.37381ZM9.37533 1.54218C5.04926 1.54218 1.54199 5.04835 1.54199 9.37381C1.54199 13.6993 5.04926 17.2055 9.37533 17.2055C11.2676 17.2055 13.0032 16.5346 14.3572 15.4178L17.1773 18.2381C17.4702 18.531 17.945 18.5311 18.2379 18.2382C18.5308 17.9453 18.5309 17.4704 18.238 17.1775L15.4182 14.3575C16.5367 13.0035 17.2087 11.2671 17.2087 9.37381C17.2087 5.04835 13.7014 1.54218 9.37533 1.54218Z"
-                    fill=""
-                  ></path>
+                    d="M3.042 9.374c0-3.497 2.835-6.332 6.333-6.332s6.334 2.835 6.334 6.332-2.836 6.332-6.334 6.332A6.334 6.334 0 0 1 3.042 9.374Zm6.333-7.832c-4.326 0-7.833 3.506-7.833 7.832s3.507 7.832 7.833 7.832c1.892 0 3.628-.671 4.982-1.787l2.82 2.82a.834.834 0 0 0 1.18-1.18l-2.82-2.82a7.799 7.799 0 0 0 1.851-4.865c0-4.326-3.507-7.832-7.833-7.832Z"
+                  />
                 </svg>
               </span>
               <input
                 type="text"
                 placeholder="Search..."
-                class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-10 w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pr-4 pl-[42px] text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden xl:w-[300px] dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                className="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-10 w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pr-4 pl-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none xl:w-[300px] dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
               />
             </div>
           </Form>
         </div>
       </div>
-      <div className="max-w-full overflow-x-auto custom-scrollbar">
-        <Table>
-          {/* Table Header */}
-          <TableHeader className="border-gray-100 dark:border-gray-800 border-y">
+
+      {/* Responsive Table */}
+      <div className="overflow-x-auto rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03] custom-scrollbar">
+        <Table className="min-w-full border-separate border-spacing-y-2 border-spacing-x-1">
+          <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
             <TableRow>
               <TableCell
                 isHeader
-                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                className="py-3 px-3 text-theme-xs text-start text-gray-500 dark:text-gray-400"
               >
                 <Checkbox checked={true} onChange={() => {}} />
               </TableCell>
               <TableCell
                 isHeader
-                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                className="py-3 px-3 text-theme-xs text-start text-gray-500 dark:text-gray-400"
               >
-                Order ID
+                ID
               </TableCell>
               <TableCell
                 isHeader
-                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                className="py-3 px-3 text-theme-xs text-start text-gray-500 dark:text-gray-400"
               >
                 Products
               </TableCell>
               <TableCell
                 isHeader
-                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                className="py-3 px-3 text-theme-xs text-start text-gray-500 dark:text-gray-400 "
               >
                 Customer Info
               </TableCell>
               <TableCell
                 isHeader
-                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                className="py-3 px-3 text-theme-xs text-start text-gray-500 dark:text-gray-400 "
               >
                 Order Info
               </TableCell>
               <TableCell
                 isHeader
-                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                className="py-3 px-3 text-theme-xs text-start text-gray-500 dark:text-gray-400 "
               >
                 Payment Info
               </TableCell>
               <TableCell
                 isHeader
-                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                className="py-3 px-3 text-theme-xs text-start text-gray-500 dark:text-gray-400"
               >
                 Status
               </TableCell>
               <TableCell
                 isHeader
-                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                className="py-3 px-3 text-theme-xs text-start text-gray-500 dark:text-gray-400 "
               >
-                Price
+                Courier
               </TableCell>
               <TableCell
                 isHeader
-                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                className="py-3 px-3 text-theme-xs text-start text-gray-500 dark:text-gray-400"
               >
                 Actions
               </TableCell>
             </TableRow>
           </TableHeader>
 
-          {/* Table Body */}
-
-          <TableBody className="divide-y divide-gray-100 dark:divide-gray-800">
+          <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
             {tableData.map((product) => (
-              <TableRow key={product.id} className="">
-                <TableCell className="py-3">
+              <TableRow key={product.id}>
+                <TableCell className="py-3 px-3">
                   <Checkbox
                     checked={false}
                     onChange={() => {}}
                     id={`checkbox-${product.id}`}
                   />
                 </TableCell>
-
-                <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                <TableCell className="py-3 px-3 text-gray-500 text-theme-sm dark:text-gray-400">
                   #{product.id}
                 </TableCell>
-
-                <TableCell className="py-3">
-                  <div className="flex items-center gap-3">
-                    <div className="h-[50px] w-[50px] overflow-hidden rounded-md">
+                <TableCell className="py-3 px-3">
+                  <div className="flex items-center gap-2">
+                    <div className="h-[40px] w-[40px] sm:h-[50px] sm:w-[50px] overflow-hidden rounded-md">
                       <img
                         src={product.image}
-                        className="h-[50px] w-[50px]"
+                        className="h-full w-full object-cover"
                         alt={product.name}
                       />
                     </div>
@@ -244,43 +230,51 @@ export default function Orders() {
                     </div>
                   </div>
                 </TableCell>
-                <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                  <div>
-                    <p className=" text-gray-500 dark:text-white/90">
-                      John Doe
-                    </p>
-                    <Link
-                      to="#"
-                      className="font-medium text-black text-theme-xs dark:text-gray-400"
-                    >
-                      01724721383
-                    </Link>
-                    <p className="text-gray-500 text-theme-xs dark:text-gray-400">
-                      House: 123, Road: 456, City: Dhaka
-                    </p>
-                  </div>
-                </TableCell>
-                <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                  <p className="text-gray-500 dark:text-white/90">price: 120</p>
-                  <p className="text-gray-500 dark:text-white/90">
-                    Discount: 120
-                  </p>
-                  <p className="text-gray-500 dark:text-white/90">
-                    Shipping: 120
-                  </p>
-                  <p className="font-medium text-gray-500 dark:text-white/90">
-                    Total: 360
+                <TableCell className="py-3 px-3  text-gray-500 text-theme-sm dark:text-gray-400">
+                  <p className="text-gray-500 dark:text-white/90">John Doe</p>
+                  <Link
+                    to="#"
+                    className="font-medium text-black text-theme-xs dark:text-gray-400"
+                  >
+                    01724721383
+                  </Link>
+                  <p className="text-theme-xs">
+                    House: 123, Road: 456, City: Dhaka
                   </p>
                 </TableCell>
-                <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                  <p className="text-gray-500 dark:text-white/90">
-                    Method: Cod
+                <TableCell className="py-3 px-3  text-gray-500 text-theme-sm dark:text-gray-400">
+                  <p className="text-gray-800 dark:text-white/90">
+                    Price: 120৳
                   </p>
-                  <p className="text-gray-500 dark:text-white/90">
-                    Transaction ID: 1234567890
+                  <p className="text-gray-500 dark:text-white/60">
+                    Discount: 120৳
                   </p>
+                  <p className="text-gray-500 dark:text-white/60">
+                    Shipping: 120৳
+                  </p>
+                  <p className="font-medium text-gray-800 dark:text-white/90">
+                    Total: 360৳
+                  </p>
+                  <p className="text-gray-500 dark:text-white/60">
+                    Pay: {product.price}
+                  </p>
+                  <p className="text-gray-500 dark:text-white/60">Due: 120৳</p>
                 </TableCell>
-                <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                <TableCell className="py-3 px-3 text-theme-sm text-gray-500 dark:text-gray-400">
+                  <Badge
+                    size="sm"
+                    color={
+                      product.status === "Delivered"
+                        ? "success"
+                        : product.status === "Pending"
+                        ? "warning"
+                        : "error"
+                    }
+                  >
+                    Paid
+                  </Badge>
+                </TableCell>
+                <TableCell className="py-3 px-3  text-theme-sm text-gray-500 dark:text-gray-400">
                   <Badge
                     size="sm"
                     color={
@@ -294,29 +288,117 @@ export default function Orders() {
                     {product.status}
                   </Badge>
                 </TableCell>
-                <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                  {product.price}
+                <TableCell className="py-3 px-3">
+                  <Badge
+                    size="sm"
+                    color={
+                      product.status === "Delivered"
+                        ? "success"
+                        : product.status === "Pending"
+                        ? "warning"
+                        : "error"
+                    }
+                  >
+                    {product.status}
+                  </Badge>
                 </TableCell>
-                <TableCell className="py-3">
-                  <div className="flex items-center gap-2">
+                <TableCell className="py-3 px-3 text-theme-sm text-gray-500 dark:text-gray-400">
+                  <div className="flex flex-col gap-3">
+                    {/* Note Icon */}
                     <Link
                       to="#"
-                      className="text-blue-600 hover:underline dark:text-blue-400"
+                      title="Note"
+                      className="text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
                     >
-                      View
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                        className="w-[14px] h-[14px]"
+                      >
+                        <path d="M5 2a2 2 0 0 0-2 2v16c0 1.104.896 2 2 2h14a2 2 0 0 0 2-2V8l-6-6H5zm7 7V3.5L18.5 9H12zM7 14h10v2H7v-2zm0-4h10v2H7v-2z" />
+                      </svg>
                     </Link>
+
+                    {/* Edit Icon */}
                     <Link
                       to="#"
-                      className="text-blue-600 hover:underline dark:text-blue-400"
+                      title="Edit"
+                      className="text-gray-500 hover:text-green-600 dark:text-gray-400 dark:hover:text-white"
                     >
-                      Edit
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-[14px] h-[14px]"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M15.232 5.232l3.536 3.536M4 20h4l10.293-10.293a1 1 0 000-1.414l-3.586-3.586a1 1 0 00-1.414 0L4 16v4z"
+                        />
+                      </svg>
                     </Link>
+
+                    {/* Delete Icon */}
                     <Link
                       to="#"
-                      className="text-red-600 hover:underline dark:text-red-400"
+                      title="Delete"
+                      className="text-gray-500 hover:text-red-600 dark:text-gray-400 dark:hover:text-white"
                     >
-                      Delete
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-[14px] h-[14px]"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="M5.755 20.283 4 8h16l-1.755 12.283A2 2 0 0 1 16.265 22h-8.53a2 2 0 0 1-1.98-1.717zM21 4h-5V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v1H3a1 1 0 0 0 0 2h18a1 1 0 0 0 0-2z" />
+                      </svg>
                     </Link>
+
+                    {/* Dropdown Menu (3 Dots) */}
+                    <div className="relative group">
+                      <button
+                        type="button"
+                        className="text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white"
+                        title="More options"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="w-[16px] h-[16px]"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <circle cx="10" cy="3.5" r="1.5" />
+                          <circle cx="10" cy="10" r="1.5" />
+                          <circle cx="10" cy="16.5" r="1.5" />
+                        </svg>
+                      </button>
+
+                      {/* Dropdown Menu */}
+                      <div className="absolute right-0 z-10 hidden w-32 mt-2 bg-white border rounded-md shadow-lg group-hover:block dark:bg-gray-800 dark:border-gray-700">
+                        <Link
+                          to="#"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
+                        >
+                          View Details
+                        </Link>
+                        <Link
+                          to="#"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
+                        >
+                          Archive
+                        </Link>
+                        <Link
+                          to="#"
+                          className="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-700"
+                        >
+                          Remove
+                        </Link>
+                      </div>
+                    </div>
                   </div>
                 </TableCell>
               </TableRow>
