@@ -5,6 +5,7 @@ import { Link, useLocation } from "react-router";
 import {
   BoxCubeIcon,
   CalenderIcon,
+  CategoryIcon,
   ChevronDownIcon,
   GridIcon,
   HorizontaLDots,
@@ -13,6 +14,7 @@ import {
   PageIcon,
   PieChartIcon,
   PlugInIcon,
+  ProductIcon,
   TableIcon,
   UserCircleIcon,
 } from "../icons";
@@ -38,6 +40,22 @@ const navItems: NavItem[] = [
     subItems: [
       { name: "POS Order", path: "/pos-order", pro: false },
       { name: "Order List", path: "/order", pro: false },
+    ],
+  },
+  {
+    icon: <ProductIcon />,
+    name: "Products",
+    subItems: [
+      { name: "Product List", path: "/product-list", pro: false },
+      { name: "Alert Products", path: "/alert-products", pro: false },
+    ],
+  },
+  {
+    icon: <CategoryIcon />,
+    name: "Categories",
+    subItems: [
+      { name: "Category List", path: "/category-list", pro: false },
+      { name: "New Category", path: "/new-category", pro: false },
     ],
   },
   {
