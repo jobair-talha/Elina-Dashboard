@@ -20,6 +20,7 @@ import { ScrollToTop } from "./components/common/ScrollToTop";
 import Home from "./pages/Dashboard/Home";
 import OrderList from "./pages/Order/OrderList";
 import PosOrder from "./pages/Order/PosOrder";
+import Products from "./pages/products";
 
 export default function App() {
   return (
@@ -34,6 +35,9 @@ export default function App() {
             {/* Order Pages */}
             <Route path="/pos-order" element={<PosOrder />} />
             <Route path="/order" element={<OrderList />} />
+
+            {/* Product Pages */}
+            <Route path="/product-list" element={<Products />} />
 
             {/* Others Page */}
             <Route path="/profile" element={<UserProfiles />} />
