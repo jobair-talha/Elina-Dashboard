@@ -21,6 +21,11 @@ import Home from "./pages/Dashboard/Home";
 import OrderList from "./pages/Order/OrderList";
 import PosOrder from "./pages/Order/PosOrder";
 import Products from "./pages/products";
+import Category from "./pages/Category";
+import SliderList from "./pages/slider";
+import CreateCategory from "./pages/Category/create";
+import CreateProductPage from "./pages/products/create";
+import SiteSettings from "./pages/settings";
 
 export default function App() {
   return (
@@ -38,6 +43,17 @@ export default function App() {
 
             {/* Product Pages */}
             <Route path="/product-list" element={<Products />} />
+            <Route path="/new-product" element={<CreateProductPage />} />
+
+            {/* Category Pages */}
+            <Route path="/category-list" element={<Category />} />
+            <Route path="/new-category" element={<CreateCategory />} />
+
+            {/* Sliders Pages */}
+            <Route path="/slider-list" element={<SliderList />} />
+
+            {/* Settings Page */}
+            <Route path="/settings" element={<SiteSettings />} />
 
             {/* Others Page */}
             <Route path="/profile" element={<UserProfiles />} />
