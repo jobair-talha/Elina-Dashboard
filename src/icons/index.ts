@@ -54,9 +54,17 @@ import { ReactComponent as ChatIcon } from "./chat.svg?react";
 import { ReactComponent as MoreDotIcon } from "./moredot.svg?react";
 import { ReactComponent as AlertHexaIcon } from "./alert-hexa.svg?react";
 import { ReactComponent as ErrorHexaIcon } from "./info-hexa.svg?react";
-import { ReactComponent as OrderIcon } from "./order-svgrepo-com.svg?react";
+import { ReactComponent as OrderIcon } from "./cart-check-svgrepo-com.svg?react";
 import { ReactComponent as CategoryIcon } from "./category-svgrepo-com.svg?react";
 import { ReactComponent as ProductIcon } from "./product-hunt-svgrepo-com.svg?react";
+import { ReactComponent as ViewIcon } from "./view-svgrepo-com.svg?react";
+import { ReactComponent as EditIcon } from "./edit-button-svgrepo-com.svg?react";
+import { ReactComponent as DeleteIcon } from "./delete-3-svgrepo-com.svg?react";
+import { ReactComponent as DuplicateIcon } from "./duplicate-svgrepo-com.svg?react";
+import { ReactComponent as SliderIcon } from "./slider-vertical-svgrepo-com.svg?react";
+import { ReactComponent as SettingsIcon } from "./settings-svgrepo-com.svg?react";
+
+
 
 export {
   ErrorHexaIcon,
@@ -118,4 +126,10 @@ export {
   OrderIcon,
   CategoryIcon,
   ProductIcon,
+  ViewIcon,
+  EditIcon,
+  DeleteIcon,
+  DuplicateIcon,
+  SliderIcon,
+  SettingsIcon
 };
