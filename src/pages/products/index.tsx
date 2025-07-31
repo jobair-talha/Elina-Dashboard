@@ -9,6 +9,7 @@ import {
 import Checkbox from "../../components/form/input/Checkbox";
 import Switch from "../../components/form/switch/Switch";
 import { Link } from "react-router";
+import { DeleteIcon, DuplicateIcon, EditIcon, ViewIcon } from "../../icons";
 
 const products = [
   {
@@ -135,6 +136,12 @@ const Products = () => {
                 >
                   Published
                 </TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                >
+                  Actions
+                </TableCell>
               </TableRow>
             </TableHeader>
 
@@ -197,6 +204,36 @@ const Products = () => {
                       defaultChecked={product.isFeatured}
                       // onChange={handleSwitchChange}
                     />
+                  </TableCell>
+                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                    <div className="flex items-center gap-2">
+                      <Link
+                        to={`/products/view/${product.id}`}
+                        className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-600"
+                        title="View Product"
+                      >
+                        <ViewIcon className="w-5 h-5" />
+                      </Link>
+                      <Link
+                        to={`/products/edit/${product.id}`}
+                        className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-600"
+                        title="Edit Product"
+                      >
+                        <DuplicateIcon className="w-5 h-5" />
+                      </Link>
+                      <Link to={`/products/edit/${product.id}`} title="Edit">
+                        <EditIcon className="w-5 h-5" />
+                      </Link>
+                      <Link
+                        to={`/products/delete/${product.id}`}
+                        className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-600"
+                        title="Delete Product"
+                      >
+                        <button className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-600">
+                          <DeleteIcon className="w-5 h-5" />
+                        </button>
+                      </Link>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))}
