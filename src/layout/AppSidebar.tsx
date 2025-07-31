@@ -15,6 +15,8 @@ import {
   PieChartIcon,
   PlugInIcon,
   ProductIcon,
+  SettingsIcon,
+  SliderIcon,
   TableIcon,
   UserCircleIcon,
 } from "../icons";
@@ -48,6 +50,7 @@ const navItems: NavItem[] = [
     subItems: [
       { name: "Product List", path: "/product-list", pro: false },
       { name: "Alert Products", path: "/alert-products", pro: false },
+      { name: "New Product", path: "/new-product", pro: false },
     ],
   },
   {
@@ -56,6 +59,14 @@ const navItems: NavItem[] = [
     subItems: [
       { name: "Category List", path: "/category-list", pro: false },
       { name: "New Category", path: "/new-category", pro: false },
+    ],
+  },
+  {
+    icon: <SliderIcon />,
+    name: "Sliders",
+    subItems: [
+      { name: "Slider List", path: "/slider-list", pro: false },
+      { name: "New Slider", path: "/new-slider", pro: false },
     ],
   },
   {
@@ -85,6 +96,11 @@ const navItems: NavItem[] = [
       { name: "Blank Page", path: "/blank", pro: false },
       { name: "404 Error", path: "/error-404", pro: false },
     ],
+  },
+  {
+    name: "Settings",
+    icon: <SettingsIcon />,
+    path: "/settings",
   },
 ];
 
