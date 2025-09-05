@@ -8,11 +8,11 @@ import TextArea from "../../components/form/input/TextArea";
 import { useState, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import { useAllCategories } from "../../services/queries/caregories";
-import { createCategory } from "../../services/api/categories";
 import toast from "react-hot-toast";
+import { useCreateCategory } from "../../services/mutations/categories/categories";
 
 type FormValues = {
-  parentCategory: string ;
+  parentCategory: string;
   categoryName: string;
   categoryImage: FileList | null;
   adsBannerImage: FileList | null;
@@ -22,8 +22,6 @@ type FormValues = {
   metaDescription: string;
   metaImage: FileList | null;
 };
-
-
 
 const CreateCategory = () => {
   const {
@@ -41,10 +39,10 @@ const CreateCategory = () => {
       metaDescription: "",
       metaImage: null,
     },
-    
   });
 
-    const { data:category} = useAllCategories({});
+  const { data: category } = useAllCategories({});
+  const { mutate: createCategory } = useCreateCategory();
 
   // State to store the files and preview URLs for Category Image
   const [categoryImageFiles, setCategoryImageFiles] = useState<File[]>([]);
@@ -127,18 +125,20 @@ const CreateCategory = () => {
 
   const onSubmit = (data: FormValues) => {
     const formData = new FormData();
-        if (categoryImageFiles.length === 0) {
-          toast.error('No files selected');
-          return;
-        }
-        formData.append('image', categoryImageFiles[0]);
-        formData.append('name', data.categoryName);
-        formData.append('slug', data.categoryName.toLowerCase().replace(/\s+/g, '-'));
-        if (data.parentCategory) {
-          formData.append('parentCategory', data.parentCategory);
-        }
-        createCategory(formData);
-   
+    if (categoryImageFiles.length === 0) {
+      toast.error("No files selected");
+      return;
+    }
+    formData.append("image", categoryImageFiles[0]);
+    formData.append("name", data.categoryName);
+    formData.append(
+      "slug",
+      data.categoryName.toLowerCase().replace(/\s+/g, "-")
+    );
+    if (data.parentCategory) {
+      formData.append("parentCategory", data.parentCategory);
+    }
+    createCategory(formData);
   };
 
   return (
@@ -155,7 +155,12 @@ const CreateCategory = () => {
                 render={({ field }) => (
                   <Select
                     {...field}
-                    options={category?.data.map(cat => ({value: cat._id, label: cat.name})) || [] }
+                    options={
+                      category?.data.map((cat) => ({
+                        value: cat._id,
+                        label: cat.name,
+                      })) || []
+                    }
                     placeholder="Select parent category"
                   />
                 )}
@@ -166,8 +171,8 @@ const CreateCategory = () => {
               <Label htmlFor="categoryName">Category Name</Label>
               <Input
                 id="categoryName"
-                {...register('categoryName', {
-                  required: 'Category name is required',
+                {...register("categoryName", {
+                  required: "Category name is required",
                 })}
                 min="3"
                 max="100"
@@ -213,7 +218,7 @@ const CreateCategory = () => {
                 id="metaTitle"
                 min="3"
                 max="100"
-                {...register('metaTitle')}
+                {...register("metaTitle")}
                 placeholder="Enter meta title"
               />
             </div>
@@ -244,10 +249,10 @@ const CreateCategory = () => {
                 className={`border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center cursor-pointer transition-colors
                 ${
                   isCategoryDragActive
-                    ? 'border-brand-500 bg-gray-100 dark:bg-gray-800'
-                    : 'border-gray-300 bg-gray-50 dark:border-gray-700 dark:bg-gray-900'
+                    ? "border-brand-500 bg-gray-100 dark:bg-gray-800"
+                    : "border-gray-300 bg-gray-50 dark:border-gray-700 dark:bg-gray-900"
                 }`}
-                style={{ minHeight: '220px' }}
+                style={{ minHeight: "220px" }}
               >
                 <input {...getCategoryInputProps()} />
                 {categoryImagePreview ? (
@@ -272,10 +277,10 @@ const CreateCategory = () => {
                 className={`border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center cursor-pointer transition-colors
                 ${
                   isAdsDragActive
-                    ? 'border-brand-500 bg-gray-100 dark:bg-gray-800'
-                    : 'border-gray-300 bg-gray-50 dark:border-gray-700 dark:bg-gray-900'
+                    ? "border-brand-500 bg-gray-100 dark:bg-gray-800"
+                    : "border-gray-300 bg-gray-50 dark:border-gray-700 dark:bg-gray-900"
                 }`}
-                style={{ minHeight: '220px' }}
+                style={{ minHeight: "220px" }}
               >
                 <input {...getAdsInputProps()} />
                 {adsBannerPreview ? (
