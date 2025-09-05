@@ -26,6 +26,8 @@ import SliderList from "./pages/slider";
 import CreateCategory from "./pages/Category/create";
 import CreateProductPage from "./pages/products/create";
 import SiteSettings from "./pages/settings";
+import CreateSlider from "./pages/slider/create";
+import UpdateSlider from "./pages/slider/update";
 
 export default function App() {
   return (
@@ -51,6 +53,8 @@ export default function App() {
 
             {/* Sliders Pages */}
             <Route path="/slider-list" element={<SliderList />} />
+            <Route path="/new-slider" element={<CreateSlider />} />
+            <Route path="/update-slider/:id" element={<UpdateSlider />} />
 
             {/* Settings Page */}
             <Route path="/settings" element={<SiteSettings />} />
