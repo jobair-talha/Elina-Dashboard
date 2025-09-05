@@ -10,37 +10,45 @@ import Checkbox from "../../components/form/input/Checkbox";
 import Switch from "../../components/form/switch/Switch";
 import { Link } from "react-router";
 import { DeleteIcon, EditIcon, ViewIcon } from "../../icons";
+import { useAllCategories } from "../../services/queries/caregories";
+import { API_URL } from "../../config";
 
 // Sample categories
-const categories = [
-  {
-    id: 1,
-    title: "Electronics",
-    image: "/images/categories/electronics.jpg",
-    parent: null,
-    isFeatured: true,
-    isPublished: true,
-  },
-  {
-    id: 2,
-    title: "Laptops",
-    image: "/images/categories/laptops.jpg",
-    parent: "Electronics",
-    isFeatured: false,
-    isPublished: true,
-  },
-  {
-    id: 3,
-    title: "Smartphones",
-    image: "/images/categories/smartphones.jpg",
-    parent: "Electronics",
-    isFeatured: true,
-    isPublished: false,
-  },
-];
+// const categories = [
+//   {
+//     id: 1,
+//     title: "Electronics",
+//     image: "/images/categories/electronics.jpg",
+//     parent: null,
+//     isFeatured: true,
+//     isPublished: true,
+//   },
+//   {
+//     id: 2,
+//     title: "Laptops",
+//     image: "/images/categories/laptops.jpg",
+//     parent: "Electronics",
+//     isFeatured: false,
+//     isPublished: true,
+//   },
+//   {
+//     id: 3,
+//     title: "Smartphones",
+//     image: "/images/categories/smartphones.jpg",
+//     parent: "Electronics",
+//     isFeatured: true,
+//     isPublished: false,
+//   },
+// ];
 
 const CategoryList = () => {
   const [checkedIds, setCheckedIds] = useState<number[]>([]);
+
+    const { data, isLoading, isError } = useAllCategories({});
+   
+
+      if (isLoading) return <div>Loading...</div>;
+      if (isError) return <div>Error loading sliders</div>;
 
   const handleCheckboxChange = (id: number) => {
     setCheckedIds((prev) =>
@@ -132,13 +140,13 @@ const CategoryList = () => {
             </TableHeader>
 
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-              {categories.map((category) => (
-                <TableRow key={category.id}>
+              {data?.data?.map((category) => (
+                <TableRow key={category._id}>
                   <TableCell className="px-5 py-4 text-start">
                     <div className="flex items-center gap-2">
                       <Checkbox
-                        checked={checkedIds.includes(category.id)}
-                        onChange={() => handleCheckboxChange(category.id)}
+                        checked={checkedIds.includes(category.__v)}
+                        onChange={() => handleCheckboxChange(category.__v)}
                       />
                       <span className="text-sm font-medium text-gray-700 dark:text-gray-400">
                         {category.id}
@@ -147,43 +155,43 @@ const CategoryList = () => {
                   </TableCell>
                   <TableCell className="px-5 py-4 text-start">
                     <span className="text-theme-sm font-medium text-gray-800 dark:text-white/90">
-                      {category.title}
+                      {category.name}
                     </span>
                   </TableCell>
                   <TableCell className="px-5 py-4 text-start">
                     <img
-                      src={category.image}
-                      alt={category.title}
+                       src={`${API_URL}/images/category/${category?.image}`}
+                      alt={category.name}
                       className="w-10 h-10 rounded object-cover"
                     />
                   </TableCell>
                   <TableCell className="px-5 py-4 text-theme-sm text-gray-500 dark:text-gray-400">
-                    {category.parent ?? "—"}
+                    {category.parentId ?? '—'}
                   </TableCell>
                   <TableCell className="px-5 py-4 text-start">
                     <Switch defaultChecked={category.isFeatured} label="" />
                   </TableCell>
                   <TableCell className="px-5 py-4 text-start">
-                    <Switch defaultChecked={category.isPublished} label="" />
+                    <Switch defaultChecked={category.isFeatured} label="" />
                   </TableCell>
                   <TableCell className="px-5 py-4 text-start">
                     <div className="flex items-center gap-2">
                       <Link
-                        to={`/categories/view/${category.id}`}
+                        to={`/categories/view/${category._id}`}
                         title="View"
                         className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-600"
                       >
                         <ViewIcon className="w-5 h-5" />
                       </Link>
                       <Link
-                        to={`/categories/edit/${category.id}`}
+                        to={`/categories/edit/${category._id}`}
                         title="Edit"
                         className="text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-600"
                       >
                         <EditIcon className="w-5 h-5" />
                       </Link>
                       <Link
-                        to={`/categories/delete/${category.id}`}
+                        to={`/categories/delete/${category._id}`}
                         title="Delete"
                       >
                         <DeleteIcon className="w-5 h-5" />

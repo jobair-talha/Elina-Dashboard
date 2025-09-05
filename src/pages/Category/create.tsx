@@ -7,24 +7,23 @@ import Select from "../../components/form/Select";
 import TextArea from "../../components/form/input/TextArea";
 import { useState, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
+import { useAllCategories } from "../../services/queries/caregories";
+import { createCategory } from "../../services/api/categories";
+import toast from "react-hot-toast";
 
 type FormValues = {
-  parentCategory: string;
+  parentCategory: string ;
   categoryName: string;
   categoryImage: FileList | null;
   adsBannerImage: FileList | null;
   isFeatured: boolean;
+  isPublished: boolean | null;
   metaTitle: string;
   metaDescription: string;
   metaImage: FileList | null;
 };
 
-const parentCategories = [
-  { value: "", label: "None" },
-  { value: "1", label: "Electronics" },
-  { value: "2", label: "Books" },
-  { value: "3", label: "Clothing" },
-];
+
 
 const CreateCategory = () => {
   const {
@@ -35,14 +34,17 @@ const CreateCategory = () => {
     formState: { errors },
   } = useForm<FormValues>({
     defaultValues: {
-      parentCategory: "",
       categoryName: "",
       isFeatured: false,
+      isPublished: false,
       metaTitle: "",
       metaDescription: "",
       metaImage: null,
     },
+    
   });
+
+    const { data:category} = useAllCategories({});
 
   // State to store the files and preview URLs for Category Image
   const [categoryImageFiles, setCategoryImageFiles] = useState<File[]>([]);
@@ -124,10 +126,19 @@ const CreateCategory = () => {
   });
 
   const onSubmit = (data: FormValues) => {
-    console.log("Form data:", data);
-    console.log("Category Image files:", categoryImageFiles);
-    console.log("Ads Banner Image files:", adsBannerFiles);
-    // Here you can upload your images and form data to backend
+    const formData = new FormData();
+        if (categoryImageFiles.length === 0) {
+          toast.error('No files selected');
+          return;
+        }
+        formData.append('image', categoryImageFiles[0]);
+        formData.append('name', data.categoryName);
+        formData.append('slug', data.categoryName.toLowerCase().replace(/\s+/g, '-'));
+        if (data.parentCategory) {
+          formData.append('parentCategory', data.parentCategory);
+        }
+        createCategory(formData);
+   
   };
 
   return (
@@ -144,7 +155,7 @@ const CreateCategory = () => {
                 render={({ field }) => (
                   <Select
                     {...field}
-                    options={parentCategories}
+                    options={category?.data.map(cat => ({value: cat._id, label: cat.name})) || [] }
                     placeholder="Select parent category"
                   />
                 )}
@@ -155,11 +166,12 @@ const CreateCategory = () => {
               <Label htmlFor="categoryName">Category Name</Label>
               <Input
                 id="categoryName"
-                {...register("categoryName", {
-                  required: "Category name is required",
+                {...register('categoryName', {
+                  required: 'Category name is required',
                 })}
+                min="3"
+                max="100"
                 placeholder="Enter category name"
-                aria-invalid={!!errors.categoryName as boolean}
               />
               {errors.categoryName && (
                 <p className="mt-1 text-red-600 text-sm">
@@ -181,12 +193,27 @@ const CreateCategory = () => {
                 )}
               />
             </div>
+            <div className="mb-4">
+              <Controller
+                name="isFeatured"
+                control={control}
+                render={({ field }) => (
+                  <Switch
+                    label="Is Published"
+                    checked={field.value}
+                    onChange={field.onChange}
+                  />
+                )}
+              />
+            </div>
 
             <div className="mb-4">
               <Label htmlFor="metaTitle">Meta Title</Label>
               <Input
                 id="metaTitle"
-                {...register("metaTitle")}
+                min="3"
+                max="100"
+                {...register('metaTitle')}
                 placeholder="Enter meta title"
               />
             </div>
@@ -217,10 +244,10 @@ const CreateCategory = () => {
                 className={`border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center cursor-pointer transition-colors
                 ${
                   isCategoryDragActive
-                    ? "border-brand-500 bg-gray-100 dark:bg-gray-800"
-                    : "border-gray-300 bg-gray-50 dark:border-gray-700 dark:bg-gray-900"
+                    ? 'border-brand-500 bg-gray-100 dark:bg-gray-800'
+                    : 'border-gray-300 bg-gray-50 dark:border-gray-700 dark:bg-gray-900'
                 }`}
-                style={{ minHeight: "220px" }}
+                style={{ minHeight: '220px' }}
               >
                 <input {...getCategoryInputProps()} />
                 {categoryImagePreview ? (
@@ -245,10 +272,10 @@ const CreateCategory = () => {
                 className={`border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center cursor-pointer transition-colors
                 ${
                   isAdsDragActive
-                    ? "border-brand-500 bg-gray-100 dark:bg-gray-800"
-                    : "border-gray-300 bg-gray-50 dark:border-gray-700 dark:bg-gray-900"
+                    ? 'border-brand-500 bg-gray-100 dark:bg-gray-800'
+                    : 'border-gray-300 bg-gray-50 dark:border-gray-700 dark:bg-gray-900'
                 }`}
-                style={{ minHeight: "220px" }}
+                style={{ minHeight: '220px' }}
               >
                 <input {...getAdsInputProps()} />
                 {adsBannerPreview ? (

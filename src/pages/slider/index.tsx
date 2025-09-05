@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import {
   Table,
   TableCell,
@@ -6,21 +5,21 @@ import {
   TableRow,
   TableBody,
 } from "../../components/ui/table";
-import Checkbox from "../../components/form/input/Checkbox";
+
 import Switch from "../../components/form/switch/Switch";
 import { Link } from "react-router";
-import { DeleteIcon, EditIcon, ViewIcon } from "../../icons";
+import {  EditIcon } from "../../icons";
 import { useSliders } from "../../services/queries/slider";
 import { API_URL } from "../../config";
 import {
   useDeleteSlider,
   useUpdateSlider,
 } from "../../services/mutations/slider/mutations";
-import { DeleteModal } from "../../components/ui/modal/delete";
+
 import DeleteAction from "../../components/actions/delete";
 
 const SliderList = () => {
-  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+
   const { data, isLoading, isError } = useSliders({});
   const { mutate: updateSliderVisibility } = useUpdateSlider();
   const { mutate: deleteSlider } = useDeleteSlider();
