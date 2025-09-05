@@ -10,41 +10,30 @@ import Checkbox from "../../components/form/input/Checkbox";
 import Switch from "../../components/form/switch/Switch";
 import { Link } from "react-router";
 import { DeleteIcon, EditIcon, ViewIcon } from "../../icons";
-
-// Sample slider data
-const sliders = [
-  {
-    id: 1,
-    image: "/images/sliders/slider-1.jpg",
-    url: "https://example.com/product/1",
-    title: "Summer Collection",
-    isPublished: true,
-  },
-  {
-    id: 2,
-    image: "/images/sliders/slider-2.jpg",
-    url: "https://example.com/product/2",
-    title: "Winter Deals",
-    isPublished: false,
-  },
-  {
-    id: 3,
-    image: "/images/sliders/slider-3.jpg",
-    url: "https://example.com/product/3",
-    title: "Flash Sale",
-    isPublished: true,
-  },
-];
+import { useSliders } from "../../services/queries/slider";
+import { API_URL } from "../../config";
+import {
+  useDeleteSlider,
+  useUpdateSlider,
+} from "../../services/mutations/slider/mutations";
+import { DeleteModal } from "../../components/ui/modal/delete";
+import DeleteAction from "../../components/actions/delete";
 
 const SliderList = () => {
-  const [checkedIds, setCheckedIds] = useState<number[]>([]);
-
-  const handleCheckboxChange = (id: number) => {
-    setCheckedIds((prev) =>
-      prev.includes(id) ? prev.filter((v) => v !== id) : [...prev, id]
-    );
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const { data, isLoading, isError } = useSliders({});
+  const { mutate: updateSliderVisibility } = useUpdateSlider();
+  const { mutate: deleteSlider } = useDeleteSlider();
+  const updateVisibility = (id: string, isVisible: boolean) => {
+    updateSliderVisibility({ id, payload: { isActive: isVisible } });
   };
 
+  const handleDelete = (id: string) => {
+    deleteSlider(id);
+  };
+
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Error loading sliders</div>;
   return (
     <>
       <nav className="mb-4">
@@ -87,19 +76,7 @@ const SliderList = () => {
                   isHeader
                   className="px-5 py-3 text-theme-xs text-start text-gray-500 dark:text-gray-400"
                 >
-                  ID
-                </TableCell>
-                <TableCell
-                  isHeader
-                  className="px-5 py-3 text-theme-xs text-start text-gray-500 dark:text-gray-400"
-                >
                   Image
-                </TableCell>
-                <TableCell
-                  isHeader
-                  className="px-5 py-3 text-theme-xs text-start text-gray-500 dark:text-gray-400"
-                >
-                  Title
                 </TableCell>
                 <TableCell
                   isHeader
@@ -123,64 +100,38 @@ const SliderList = () => {
             </TableHeader>
 
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-              {sliders.map((slider) => (
+              {data?.data?.map((slider) => (
                 <TableRow key={slider.id}>
                   <TableCell className="px-5 py-4 text-start">
-                    <div className="flex items-center gap-2">
-                      <Checkbox
-                        checked={checkedIds.includes(slider.id)}
-                        onChange={() => handleCheckboxChange(slider.id)}
-                      />
-                      <span className="text-sm font-medium text-gray-700 dark:text-gray-400">
-                        {slider.id}
-                      </span>
-                    </div>
-                  </TableCell>
-                  <TableCell className="px-5 py-4 text-start">
                     <img
-                      src={slider.image}
-                      alt={slider.title}
+                      src={`${API_URL}/images/sliders/${slider.imageUrl}`}
+                      alt={slider.linkUrl}
                       className="w-16 h-10 rounded object-cover"
                     />
                   </TableCell>
                   <TableCell className="px-5 py-4 text-theme-sm font-medium text-gray-800 dark:text-white/90">
-                    {slider.title}
+                    {slider.linkUrl}
                   </TableCell>
-                  <TableCell className="px-5 py-4 text-theme-sm text-blue-600 dark:text-blue-400 truncate max-w-[200px]">
-                    <a
-                      href={slider.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {slider.url}
-                    </a>
-                  </TableCell>
+
                   <TableCell className="px-5 py-4 text-start">
-                    <Switch defaultChecked={slider.isPublished} label="" />
+                    <Switch
+                      defaultChecked={slider.isActive}
+                      label=""
+                      onChange={() =>
+                        updateVisibility(slider.id, !slider.isActive)
+                      }
+                    />
                   </TableCell>
                   <TableCell className="px-5 py-4 text-start">
                     <div className="flex items-center gap-2">
                       <Link
-                        to={`/sliders/view/${slider.id}`}
-                        title="View"
-                        className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-600"
-                      >
-                        <ViewIcon className="w-5 h-5" />
-                      </Link>
-                      <Link
-                        to={`/sliders/edit/${slider.id}`}
+                        to={`/update-slider/${slider.id}`}
                         title="Edit"
                         className="text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-600"
                       >
                         <EditIcon className="w-5 h-5" />
                       </Link>
-                      <Link
-                        to={`/sliders/delete/${slider.id}`}
-                        title="Delete"
-                        className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-600"
-                      >
-                        <DeleteIcon className="w-5 h-5 text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-600" />
-                      </Link>
+                      <DeleteAction deleteFun={() => handleDelete(slider.id)} />
                     </div>
                   </TableCell>
                 </TableRow>
