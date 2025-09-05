@@ -30,6 +30,7 @@ export const updateCategory = async (
   data: FormData | Partial<Category>
 ): Promise<ApiResponse<Category>> => {
   const response = await api.put(`/categories/${id}`, data);
+  console.log(response)
   return response.data;
 };
 

@@ -22,9 +22,7 @@ export function useCreateCategory() {
     },
 
     onSuccess: (data) => {
-        console.log(data)
-      toast.success(data.message);
-      
+      toast.success(data.message); 
       navigate('/category-list');
     },
 

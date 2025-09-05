@@ -28,6 +28,7 @@ import CreateProductPage from "./pages/products/create";
 import SiteSettings from "./pages/settings";
 import CreateSlider from "./pages/slider/create";
 import UpdateSlider from "./pages/slider/update";
+import UpdateCategory from "./pages/Category/update";
 
 export default function App() {
   return (
@@ -50,6 +51,7 @@ export default function App() {
             {/* Category Pages */}
             <Route path="/category-list" element={<Category />} />
             <Route path="/new-category" element={<CreateCategory />} />
+            <Route path="/update-category/:slug" element={<UpdateCategory />} />
 
             {/* Sliders Pages */}
             <Route path="/slider-list" element={<SliderList />} />

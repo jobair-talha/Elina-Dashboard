@@ -2,11 +2,11 @@ import { useForm } from "react-hook-form";
 import ComponentCard from "../../components/common/ComponentCard";
 import Label from "../../components/form/Label";
 import Input from "../../components/form/input/InputField";
-import { useState, useEffect, use } from "react";
+import { useState, useEffect } from "react";
 import DropzoneComponent from "../../components/form/form-elements/DropZone";
-import toast from "react-hot-toast";
+
 import {
-  useCreateSlider,
+  
   useUpdateSlider,
 } from "../../services/mutations/slider/mutations";
 import { useSingleSlider } from "../../services/queries/slider";
