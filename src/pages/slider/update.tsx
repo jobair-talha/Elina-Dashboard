@@ -5,10 +5,7 @@ import Input from "../../components/form/input/InputField";
 import { useState, useEffect } from "react";
 import DropzoneComponent from "../../components/form/form-elements/DropZone";
 
-import {
-  
-  useUpdateSlider,
-} from "../../services/mutations/slider/mutations";
+import { useUpdateSlider } from "../../services/mutations/slider/mutations";
 import { useSingleSlider } from "../../services/queries/slider";
 import { useParams } from "react-router";
 import { API_URL } from "../../config";

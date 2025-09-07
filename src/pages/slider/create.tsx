@@ -93,10 +93,11 @@ const CreateSlider = () => {
         {/* Submit button */}
         <div className="text-center">
           <button
+            disabled={isPending}
             type="submit"
             className="rounded bg-brand-500 px-6 py-3 text-white hover:bg-brand-600 dark:bg-brand-400 dark:hover:bg-brand-500 transition"
           >
-            Create Slider
+            {isPending ? "Creating..." : "Create Slider"}
           </button>
         </div>
       </form>
