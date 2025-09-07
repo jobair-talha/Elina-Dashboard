@@ -22,6 +22,7 @@ interface Iprops {
 export default function Orders({ orders }: Iprops) {
   const [filterOpen, setFilterOpen] = useState(false);
   const [calendarOpen, setCalendarOpen] = useState(false);
+  const [dateRange, setDateRange] = useState<[Date, Date] | null>(null);
 
   return (
     <>
@@ -136,7 +137,11 @@ export default function Orders({ orders }: Iprops) {
       {calendarOpen && (
         <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/40">
           <div className="bg-white dark:bg-gray-900 rounded-lg p-6 shadow-xl">
-            <Calendar onChange={(date) => console.log(date)} />
+            <Calendar
+              selectRange={true}
+              onChange={(range) => setDateRange(range as [Date, Date])}
+              value={dateRange}
+            />
             <div className="mt-4 flex justify-end gap-2">
               <button
                 onClick={() => setCalendarOpen(false)}
@@ -349,8 +354,115 @@ export default function Orders({ orders }: Iprops) {
                       {order.status}
                     </Badge>
                   </TableCell>
-                  <TableCell className="py-3 px-1 flex justify-center text-theme-sm text-gray-500 dark:text-gray-400">
-                    {/* Actions ... (your existing code) */}
+                  <TableCell className="py-3 px-1 flex justify-center items-center text-theme-sm text-gray-500 dark:text-gray-400">
+                    {' '}
+                    <div className="flex flex-col gap-3">
+                      {' '}
+                      {/* Note Icon */}{' '}
+                      <Link
+                        to="#"
+                        title="Note"
+                        className="text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
+                      >
+                        {' '}
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="currentColor"
+                          viewBox="0 0 24 24"
+                          className="w-[14px] h-[14px]"
+                        >
+                          {' '}
+                          <path d="M5 2a2 2 0 0 0-2 2v16c0 1.104.896 2 2 2h14a2 2 0 0 0 2-2V8l-6-6H5zm7 7V3.5L18.5 9H12zM7 14h10v2H7v-2zm0-4h10v2H7v-2z" />{' '}
+                        </svg>{' '}
+                      </Link>{' '}
+                      {/* Edit Icon */}{' '}
+                      <Link
+                        to="#"
+                        title="Edit"
+                        className="text-gray-500 hover:text-green-600 dark:text-gray-400 dark:hover:text-white"
+                      >
+                        {' '}
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="w-[14px] h-[14px]"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                        >
+                          {' '}
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M15.232 5.232l3.536 3.536M4 20h4l10.293-10.293a1 1 0 000-1.414l-3.586-3.586a1 1 0 00-1.414 0L4 16v4z"
+                          />{' '}
+                        </svg>{' '}
+                      </Link>{' '}
+                      {/* Delete Icon */}{' '}
+                      <Link
+                        to="#"
+                        title="Delete"
+                        className="text-gray-500 hover:text-red-600 dark:text-gray-400 dark:hover:text-white"
+                      >
+                        {' '}
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="w-[14px] h-[14px]"
+                          fill="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          {' '}
+                          <path d="M5.755 20.283 4 8h16l-1.755 12.283A2 2 0 0 1 16.265 22h-8.53a2 2 0 0 1-1.98-1.717zM21 4h-5V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v1H3a1 1 0 0 0 0 2h18a1 1 0 0 0 0-2z" />{' '}
+                        </svg>{' '}
+                      </Link>{' '}
+                      {/* Dropdown Menu (3 Dots) */}{' '}
+                      <div className="relative group">
+                        {' '}
+                        <button
+                          type="button"
+                          className="text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white"
+                          title="More options"
+                        >
+                          {' '}
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="w-[16px] h-[16px]"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            {' '}
+                            <circle cx="10" cy="3.5" r="1.5" />{' '}
+                            <circle cx="10" cy="10" r="1.5" />{' '}
+                            <circle cx="10" cy="16.5" r="1.5" />{' '}
+                          </svg>{' '}
+                        </button>{' '}
+                        {/* Dropdown Menu */}{' '}
+                        <div className="absolute right-0 z-10 hidden w-32 mt-2 bg-white border rounded-md shadow-lg group-hover:block dark:bg-gray-800 dark:border-gray-700">
+                          {' '}
+                          <Link
+                            to="#"
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
+                          >
+                            {' '}
+                            View Details{' '}
+                          </Link>{' '}
+                          <Link
+                            to="#"
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
+                          >
+                            {' '}
+                            Archive{' '}
+                          </Link>{' '}
+                          <Link
+                            to="#"
+                            className="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-700"
+                          >
+                            {' '}
+                            Remove{' '}
+                          </Link>{' '}
+                        </div>{' '}
+                      </div>{' '}
+                    </div>{' '}
                   </TableCell>
                 </TableRow>
               ))}
