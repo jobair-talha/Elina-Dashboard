@@ -129,14 +129,19 @@ const CreateCategory = () => {
       toast.error("No files selected");
       return;
     }
-    formData.append("image", categoryImageFiles[0]);
+    if (adsBannerFiles.length > 0) {
+      formData.append("adsBanner", adsBannerFiles[0]);
+    }
+    if (categoryImageFiles.length > 0) {
+      formData.append("image", categoryImageFiles[0]);
+    }
     formData.append("name", data.categoryName);
     formData.append(
       "slug",
       data.categoryName.toLowerCase().replace(/\s+/g, "-")
     );
     if (data.parentCategory) {
-      formData.append("parentCategory", data.parentCategory);
+      formData.append("parentId", data.parentCategory);
     }
     createCategory(formData);
   };
@@ -192,7 +197,7 @@ const CreateCategory = () => {
                 render={({ field }) => (
                   <Switch
                     label="Is Featured"
-                    checked={field.value}
+                    defaultChecked={field.value}
                     onChange={field.onChange}
                   />
                 )}
@@ -205,7 +210,7 @@ const CreateCategory = () => {
                 render={({ field }) => (
                   <Switch
                     label="Is Published"
-                    checked={field.value}
+                    defaultChecked={field.value}
                     onChange={field.onChange}
                   />
                 )}
@@ -216,8 +221,8 @@ const CreateCategory = () => {
               <Label htmlFor="metaTitle">Meta Title</Label>
               <Input
                 id="metaTitle"
-                min="3"
-                max="100"
+                minLength={3}
+                maxLength={100}
                 {...register("metaTitle")}
                 placeholder="Enter meta title"
               />

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { JSX, useState } from "react";
 import {
   Table,
   TableCell,
@@ -13,54 +13,113 @@ import { DeleteIcon, EditIcon, ViewIcon } from "../../icons";
 import { useAllCategories } from "../../services/queries/caregories";
 import { API_URL } from "../../config";
 import { useDeleteCategory } from "../../services/mutations/categories/categories";
-
-// Sample categories
-// const categories = [
-//   {
-//     id: 1,
-//     title: "Electronics",
-//     image: "/images/categories/electronics.jpg",
-//     parent: null,
-//     isFeatured: true,
-//     isPublished: true,
-//   },
-//   {
-//     id: 2,
-//     title: "Laptops",
-//     image: "/images/categories/laptops.jpg",
-//     parent: "Electronics",
-//     isFeatured: false,
-//     isPublished: true,
-//   },
-//   {
-//     id: 3,
-//     title: "Smartphones",
-//     image: "/images/categories/smartphones.jpg",
-//     parent: "Electronics",
-//     isFeatured: true,
-//     isPublished: false,
-//   },
-// ];
+import { Category } from "../../types/categories";
 
 const CategoryList = () => {
   const [checkedIds, setCheckedIds] = useState<number[]>([]);
 
-    const { data, isLoading, isError } = useAllCategories({});
-   const { mutate: deleteCategory } = useDeleteCategory();
+  const { data, isLoading, isError } = useAllCategories({});
+  const { mutate: deleteCategory } = useDeleteCategory();
 
-      if (isLoading) return <div>Loading...</div>;
-      if (isError) return <div>Error loading sliders</div>;
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Error loading sliders</div>;
 
   const handleCheckboxChange = (id: number) => {
     setCheckedIds((prev) =>
       prev.includes(id) ? prev.filter((v) => v !== id) : [...prev, id]
     );
   };
- 
-    const handleDelete = (id: string) => {
-      
-      deleteCategory(id);
-    };
+
+  const handleDelete = (id: string) => {
+    deleteCategory(id);
+  };
+
+  const renderRows = (
+    items: Category[] = [],
+    level = 0,
+    parentName?: string
+  ): JSX.Element[] => {
+    const rows: JSX.Element[] = [];
+
+    items.forEach((category) => {
+      rows.push(
+        <TableRow key={category._id}>
+          <TableCell className="px-5 py-4 text-start">
+            <div className="flex items-center gap-2">
+              <Checkbox
+                checked={checkedIds.includes(category.__v)}
+                onChange={() => handleCheckboxChange(category.__v)}
+              />
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-400">
+                {category.id}
+              </span>
+            </div>
+          </TableCell>
+          <TableCell className="px-5 py-4 text-start">
+            <span
+              className="text-theme-sm font-medium text-gray-800 dark:text-white/90"
+              style={{ paddingLeft: level * 16 }}
+            >
+              {level > 0 ? "— ".repeat(level) : ""}
+              {category.name}
+            </span>
+          </TableCell>
+          <TableCell className="px-5 py-4 text-start">
+            <img
+              src={`${API_URL}/images/category/${category?.image}`}
+              alt={category.name}
+              className="w-10 h-10 rounded object-cover"
+            />
+          </TableCell>
+          <TableCell className="px-5 py-4 text-start">
+            <img
+              src={`${API_URL}/images/category/${category?.adsBanner}`}
+              alt={category.name}
+              className="w-10 h-10 rounded object-cover"
+            />
+          </TableCell>
+          <TableCell className="px-5 py-4 text-theme-sm text-gray-500 dark:text-gray-400">
+            {parentName ?? "—"}
+          </TableCell>
+          <TableCell className="px-5 py-4 text-start">
+            <Switch defaultChecked={category.isFeatured} label="" />
+          </TableCell>
+          <TableCell className="px-5 py-4 text-start">
+            <Switch defaultChecked={category.isFeatured} label="" />
+          </TableCell>
+          <TableCell className="px-5 py-4 text-start">
+            <div className="flex items-center gap-2">
+              <Link
+                to={`/categories/view/${category._id}`}
+                title="View"
+                className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-600"
+              >
+                <ViewIcon className="w-5 h-5" />
+              </Link>
+              <Link
+                to={`/update-category/${category.slug}`}
+                title="Edit"
+                className="text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-600"
+              >
+                <EditIcon className="w-5 h-5" />
+              </Link>
+
+              <DeleteIcon
+                className="w-5 h-5 cursor-pointer"
+                onClick={() => handleDelete(category._id)}
+              />
+            </div>
+          </TableCell>
+        </TableRow>
+      );
+
+      if (Array.isArray(category.children) && category.children.length > 0) {
+        rows.push(...renderRows(category.children, level + 1, category.name));
+      }
+    });
+
+    return rows;
+  };
 
   return (
     <>
@@ -152,72 +211,7 @@ const CategoryList = () => {
             </TableHeader>
 
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-              {data?.data?.map((category) => (
-                <TableRow key={category._id}>
-                  <TableCell className="px-5 py-4 text-start">
-                    <div className="flex items-center gap-2">
-                      <Checkbox
-                        checked={checkedIds.includes(category.__v)}
-                        onChange={() => handleCheckboxChange(category.__v)}
-                      />
-                      <span className="text-sm font-medium text-gray-700 dark:text-gray-400">
-                        {category.id}
-                      </span>
-                    </div>
-                  </TableCell>
-                  <TableCell className="px-5 py-4 text-start">
-                    <span className="text-theme-sm font-medium text-gray-800 dark:text-white/90">
-                      {category.name}
-                    </span>
-                  </TableCell>
-                  <TableCell className="px-5 py-4 text-start">
-                    <img
-                      src={`${API_URL}/images/category/${category?.image}`}
-                      alt={category.name}
-                      className="w-10 h-10 rounded object-cover"
-                    />
-                  </TableCell>
-                  <TableCell className="px-5 py-4 text-start">
-                    <img
-                      src={`${API_URL}/images/category/${category?.image}`}
-                      alt={category.name}
-                      className="w-10 h-10 rounded object-cover"
-                    />
-                  </TableCell>
-                  <TableCell className="px-5 py-4 text-theme-sm text-gray-500 dark:text-gray-400">
-                    {category.parentId ?? '—'}
-                  </TableCell>
-                  <TableCell className="px-5 py-4 text-start">
-                    <Switch defaultChecked={category.isFeatured} label="" />
-                  </TableCell>
-                  <TableCell className="px-5 py-4 text-start">
-                    <Switch defaultChecked={category.isFeatured} label="" />
-                  </TableCell>
-                  <TableCell className="px-5 py-4 text-start">
-                    <div className="flex items-center gap-2">
-                      <Link
-                        to={`/categories/view/${category._id}`}
-                        title="View"
-                        className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-600"
-                      >
-                        <ViewIcon className="w-5 h-5" />
-                      </Link>
-                      <Link
-                        to={`/update-category/${category.slug}`}
-                        title="Edit"
-                        className="text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-600"
-                      >
-                        <EditIcon className="w-5 h-5" />
-                      </Link>
-
-                      <DeleteIcon
-                        className="w-5 h-5 cursor-pointer"
-                        onClick={() => handleDelete(category._id)}
-                      />
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
+              {renderRows(data?.data || [])}
             </TableBody>
           </Table>
         </div>
