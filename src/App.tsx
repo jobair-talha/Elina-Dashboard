@@ -29,6 +29,7 @@ import SiteSettings from "./pages/settings";
 import CreateSlider from "./pages/slider/create";
 import UpdateSlider from "./pages/slider/update";
 import UpdateCategory from "./pages/Category/update";
+import UpdateProductPage from "./pages/products/update";
 
 export default function App() {
   return (
@@ -47,6 +48,10 @@ export default function App() {
             {/* Product Pages */}
             <Route path="/product-list" element={<Products />} />
             <Route path="/new-product" element={<CreateProductPage />} />
+            <Route
+              path="/products/edit/:slug"
+              element={<UpdateProductPage />}
+            />
 
             {/* Category Pages */}
             <Route path="/category-list" element={<Category />} />

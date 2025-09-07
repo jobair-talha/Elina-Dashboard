@@ -1,0 +1,8 @@
+.ql-container .ql-editor {
+  min-height: 200px;
+}
+
+.ql-picker.ql-size .ql-picker-label::before,
+.ql-picker.ql-size .ql-picker-item::before {
+  content: attr(data-value) !important;
+}
