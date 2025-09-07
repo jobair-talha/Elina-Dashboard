@@ -9,68 +9,14 @@ import Badge from "../../../../components/ui/badge/Badge";
 import Form from "../../../../components/form/Form";
 import Checkbox from "../../../../components/form/input/Checkbox";
 import { Link } from "react-router";
+import { IOrder } from "../../../../types/order";
+import ProductItem from "./ProductItem";
 
-// Product type
-interface Product {
-  id: number;
-  name: string;
-  variants: string;
-  category: string;
-  price: string;
-  image: string;
-  status: "Delivered" | "Pending" | "Canceled";
+interface Iprops {
+  orders: IOrder[];
 }
 
-// Table data
-const tableData: Product[] = [
-  {
-    id: 1,
-    name: "MacBook Pro 13”",
-    variants: "2 Variants",
-    category: "Laptop",
-    price: "$2399.00",
-    status: "Delivered",
-    image: "/images/product/product-01.jpg",
-  },
-  {
-    id: 2,
-    name: "Apple Watch Ultra",
-    variants: "1 Variant",
-    category: "Watch",
-    price: "$879.00",
-    status: "Pending",
-    image: "/images/product/product-02.jpg",
-  },
-  {
-    id: 3,
-    name: "iPhone 15 Pro Max",
-    variants: "2 Variants",
-    category: "SmartPhone",
-    price: "$1869.00",
-    status: "Delivered",
-    image: "/images/product/product-03.jpg",
-  },
-  {
-    id: 4,
-    name: "iPad Pro 3rd Gen",
-    variants: "2 Variants",
-    category: "Electronics",
-    price: "$1699.00",
-    status: "Canceled",
-    image: "/images/product/product-04.jpg",
-  },
-  {
-    id: 5,
-    name: "AirPods Pro 2nd Gen",
-    variants: "1 Variant",
-    category: "Accessories",
-    price: "$240.00",
-    status: "Delivered",
-    image: "/images/product/product-05.jpg",
-  },
-];
-
-export default function Orders() {
+export default function Orders({ orders }: Iprops) {
   return (
     <>
       {/* Filters */}
@@ -164,6 +110,12 @@ export default function Orders() {
                   isHeader
                   className="py-3 px-3 text-theme-xs text-start text-gray-500 dark:text-gray-400"
                 >
+                  Shipping Info
+                </TableCell>
+                <TableCell
+                  isHeader
+                  className="py-3 px-3 text-theme-xs text-start text-gray-500 dark:text-gray-400"
+                >
                   Order Info
                 </TableCell>
                 <TableCell
@@ -194,68 +146,76 @@ export default function Orders() {
             </TableHeader>
 
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-              {tableData.map((product) => (
-                <TableRow key={product.id} className="gap-x-2">
+              {orders.map((order) => (
+                <TableRow key={order.id} className="gap-x-2">
                   <TableCell className="py-3 px-3">
                     <Checkbox
                       checked={false}
                       onChange={() => {}}
-                      id={`checkbox-${product.id}`}
+                      id={`checkbox-${order.id}`}
                     />
                   </TableCell>
                   <TableCell className="py-3 px-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    #{product.id}
+                    {order.serial}
                   </TableCell>
                   <TableCell className="py-3 px-3">
-                    <div className="flex items-center gap-2">
-                      <div className="h-[40px] w-[40px] sm:h-[50px] sm:w-[50px] overflow-hidden rounded-md">
-                        <img
-                          src={product.image}
-                          className="h-full w-full object-cover"
-                          alt={product.name}
-                        />
-                      </div>
-                      <div>
-                        <p className="font-medium text-gray-800 text-theme-sm dark:text-white/90">
-                          {product.name}
-                        </p>
-                        <span className="text-gray-500 text-theme-xs dark:text-gray-400">
-                          {product.variants}
-                        </span>
-                      </div>
-                    </div>
+                    <ProductItem orderProducts={order.products} />
                   </TableCell>
                   <TableCell className="py-3 px-3 text-theme-sm text-gray-500 dark:text-gray-400">
-                    <p className="text-gray-800 dark:text-white/90">John Doe</p>
+                    <p className="text-gray-800 dark:text-white/90">
+                      {order.customerInfo.name}
+                    </p>
                     <Link
-                      to="#"
+                      to={`tel:${
+                        order.customerInfo.mobile.startsWith("+880")
+                          ? order.customerInfo.mobile
+                          : `+880${order.customerInfo.mobile}`
+                      }`}
                       className="text-theme-xs font-medium text-black dark:text-gray-400"
                     >
-                      01724721383
+                      {order.customerInfo.mobile}
                     </Link>
                     <p className="text-theme-xs">
-                      House: 123, Road: 456, City: Dhaka
+                      {order.customerInfo.address}
                     </p>
                   </TableCell>
                   <TableCell className="py-3 px-3 text-theme-sm text-gray-500 dark:text-gray-400">
                     <p className="text-gray-800 dark:text-white/90">
-                      Price: 120৳
+                      {order.shippingInfo.name}
                     </p>
-                    <p>Discount: 120৳</p>
-                    <p>Shipping: 120৳</p>
+                    <Link
+                      to={`tel:${
+                        order.shippingInfo.mobile.startsWith("+88")
+                          ? order.shippingInfo.mobile
+                          : `+88${order.shippingInfo.mobile}`
+                      }`}
+                      className="text-theme-xs font-medium text-black dark:text-gray-400"
+                    >
+                      {order.shippingInfo.mobile}
+                    </Link>
+                    <p className="text-theme-xs">
+                      {order.shippingInfo.address}
+                    </p>
+                  </TableCell>
+                  <TableCell className="py-3 px-3 text-theme-sm text-gray-500 dark:text-gray-400">
+                    <p className="text-gray-800 dark:text-white/90">
+                      Price: {order.totalProductsPrice}৳
+                    </p>
+                    <p>Discount: {order.discountAmount}৳</p>
+                    <p>Shipping: {order.shippingAmount}৳</p>
                     <p className="font-medium text-gray-800 dark:text-white/90">
-                      Total: 360৳
+                      Total: {order.totalAmount}৳
                     </p>
-                    <p>Pay: {product.price}</p>
-                    <p>Due: 120৳</p>
+                    <p>Pay: {order.payAmount}৳</p>
+                    <p>Due: {order.remainingPayableAmount}৳</p>
                   </TableCell>
                   <TableCell className="py-3 px-3">
                     <Badge
                       size="sm"
                       color={
-                        product.status === "Delivered"
+                        order.orderStatus === "delivered"
                           ? "success"
-                          : product.status === "Pending"
+                          : order.orderStatus === "pending"
                           ? "warning"
                           : "error"
                       }
@@ -267,28 +227,28 @@ export default function Orders() {
                     <Badge
                       size="sm"
                       color={
-                        product.status === "Delivered"
+                        order.status === "Delivered"
                           ? "success"
-                          : product.status === "Pending"
+                          : order.status === "Pending"
                           ? "warning"
                           : "error"
                       }
                     >
-                      {product.status}
+                      {order.status}
                     </Badge>
                   </TableCell>
                   <TableCell className="py-3 px-3">
                     <Badge
                       size="sm"
                       color={
-                        product.status === "Delivered"
+                        order.status === "Delivered"
                           ? "success"
-                          : product.status === "Pending"
+                          : order.status === "Pending"
                           ? "warning"
                           : "error"
                       }
                     >
-                      {product.status}
+                      {order.status}
                     </Badge>
                   </TableCell>
                   <TableCell className="py-3 px-3 text-theme-sm text-gray-500 dark:text-gray-400">
