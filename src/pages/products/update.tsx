@@ -1,4 +1,4 @@
-import { Controller, useForm } from "react-hook-form";
+import { Controller, set, useForm } from "react-hook-form";
 import Dropzone from "react-dropzone";
 import ReactSelect from "react-select";
 import { useState, useEffect, useCallback } from "react";
@@ -14,7 +14,13 @@ import DropzoneComponent from "../../components/form/form-elements/DropZone";
 import { useAllCategories } from "../../services/queries/caregories";
 import { Category } from "../../types/categories";
 import InputEditor from "../../components/form/input/InputEditor";
-import { useCreateProduct } from "../../services/mutations/product/mutations";
+import {
+  useCreateProduct,
+  useUpdateProduct,
+} from "../../services/mutations/product/mutations";
+import { useParams } from "react-router";
+import { useSingleProduct } from "../../services/queries/product";
+import { API_URL } from "../../config";
 
 type DiscountType = "fixed" | "percent";
 
@@ -41,7 +47,11 @@ interface FormValues {
   thumbnailImage: File | null;
 }
 
-export default function CreateProductPage() {
+export default function UpdateProductPage() {
+  const { slug } = useParams();
+  const { data: product, isSuccess: productSuccess } = useSingleProduct(
+    slug || ""
+  );
   const {
     register,
     handleSubmit,
@@ -64,7 +74,7 @@ export default function CreateProductPage() {
     page: 1,
     limit: 100,
   });
-  const { mutate: createProduct } = useCreateProduct();
+  const { mutate: updateProduct, isPending } = useUpdateProduct();
   const [galleryPreviews, setGalleryPreviews] = useState<string[]>([]);
   const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
 
@@ -166,15 +176,76 @@ export default function CreateProductPage() {
       });
     }
 
-    createProduct(formData);
+    updateProduct({ id: slug, payload: formData });
   };
+
+  useEffect(() => {
+    if (productSuccess) {
+      setValue("name", product?.data?.name || "");
+      setValue("sku", product?.data?.sku || "");
+      // Map product categories to flattened options (preserving hierarchy if available)
+      (() => {
+        const productCats = product?.data?.categories || [];
+        let selected: { label: string; value: string }[] = [];
+        if (Array.isArray(productCats)) {
+          if (categorySuccess && categories?.data) {
+            const flattened = flattenCategories(categories.data);
+            selected = productCats
+              .map((pc: any) => {
+                const id = pc?._id || pc?.id || pc?.value;
+                if (!id) return null;
+                const match = flattened.find((opt) => opt.value === id);
+                return (
+                  match || {
+                    label: pc?.name || String(id),
+                    value: String(id),
+                  }
+                );
+              })
+              .filter(Boolean) as { label: string; value: string }[];
+          } else {
+            selected = productCats.map((pc: any) => ({
+              label: pc?.name || pc?.label || "",
+              value: String(pc?._id || pc?.id || pc?.value || ""),
+            }));
+          }
+        }
+        setValue("categories", selected);
+      })();
+      setValue("stockAlert", product?.data?.stockAlert || 0);
+      setValue("regularPrice", product?.data?.regularPrice || 0);
+      setValue(
+        "discountType",
+        product?.data?.discount?.discountType || "fixed"
+      );
+      setValue("discountAmount", product?.data?.discount?.discountValue || 0);
+      setValue("salesPrice", product?.data?.salePrice || 0);
+      setValue("description", product?.data?.description || "");
+      setValue("shortDescription", product?.data?.shortDescription || "");
+      setValue("metaTitle", product?.data?.metaTitle || "");
+      setValue("metaDescription", product?.data?.metaDescription || "");
+      setValue("metaKeywords", product?.data?.metaKeywords || "");
+      setValue("isFeatured", product?.data?.isFeatured || false);
+      setValue("isPosSuggestion", product?.data?.isPosSuggestion || false);
+      setValue("isPublished", product?.data?.isPublished || false);
+      setValue("isNewProduct", product?.data?.isNewProduct || false);
+      setThumbnailPreview(
+        `${API_URL}/images/products/${product?.data?.thumbnail}` || null
+      );
+      setGalleryPreviews(
+        product?.data?.galleryImages.map(
+          (img) => `${API_URL}/images/products/${img}`
+        ) || []
+      );
+    }
+  }, [productSuccess]);
   return (
     <>
       <PageMeta
-        title="Create a new product"
-        description="Create and manage your products with ease using our intuitive form."
+        title="Update a product"
+        description="Update and manage your products with ease using our intuitive form."
       />
-      <PageBreadcrumb pageTitle="New Product" />
+      <PageBreadcrumb pageTitle="Update Product" />
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="grid grid-cols-1 lg:grid-cols-2 gap-6"
@@ -244,7 +315,29 @@ export default function CreateProductPage() {
 
             <div className="mb-2">
               <Label htmlFor="stockAlert">Stock Alert</Label>
-              <Input type="number" {...register("stockAlert")} />
+              <Controller
+                name="stockAlert"
+                control={control}
+                rules={{
+                  required: "Stock Alert is required",
+                  pattern: /^[0-9]+$/,
+                  min: 0,
+                  max: 1000000,
+                }}
+                render={({ field }) => (
+                  <Input
+                    id="stockAlert"
+                    type="number"
+                    {...field}
+                    placeholder="Enter stock alert"
+                  />
+                )}
+              />
+              {errors?.stockAlert && (
+                <p className="text-red-500 text-xs">
+                  {errors?.stockAlert?.message}
+                </p>
+              )}
             </div>
           </ComponentCard>
 
@@ -504,10 +597,11 @@ export default function CreateProductPage() {
           </ComponentCard>
 
           <button
+            disabled={isPending}
             type="submit"
             className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
           >
-            Create Product
+            {isPending ? "Updating..." : "Update Product"}
           </button>
         </div>
       </form>

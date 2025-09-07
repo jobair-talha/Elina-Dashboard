@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Table,
   TableCell,
@@ -10,51 +10,65 @@ import Checkbox from "../../components/form/input/Checkbox";
 import Switch from "../../components/form/switch/Switch";
 import { Link } from "react-router";
 import { DeleteIcon, DuplicateIcon, EditIcon, ViewIcon } from "../../icons";
-
-const products = [
-  {
-    id: 1,
-    name: "Product A",
-    price: "$10",
-    category: ["Category 1", "Category 2", "Category 3"],
-    image: "/images/product/product-01.jpg",
-    status: "In Stock",
-    isFeatured: false,
-    isPublished: true,
-    stock: 100,
-  },
-  {
-    id: 2,
-    name: "Product B",
-    price: "$20",
-    category: ["Category 2", "Category 3"],
-    image: "/images/product/product-02.jpg",
-    status: "Out of Stock",
-    isFeatured: true,
-    isPublished: true,
-    stock: 0,
-  },
-  {
-    id: 3,
-    name: "Product C",
-    price: "$30",
-    category: ["Category 1", "Category 3"],
-    image: "/images/product/product-03.jpg",
-    status: "Low Stock",
-    isFeatured: false,
-    isPublished: false,
-    stock: 5,
-  },
-];
-
-const statusColor = {
-  "In Stock": "success",
-  "Out of Stock": "error",
-  "Low Stock": "warning",
+import Pagination from "../../components/pagination";
+import { useProducts } from "../../services/queries/product";
+import { API_URL } from "../../config";
+import Badge from "../../components/ui/badge/Badge";
+import Form from "../../components/form/Form";
+import { useForm } from "react-hook-form";
+import { IBadgeColortype } from "../../types/product";
+type FormValues = {
+  searchTerm: string;
 };
-
 const Products = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: {},
+  } = useForm<FormValues>({
+    defaultValues: {
+      searchTerm: "",
+    },
+  });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [searchTerm, setSearchTerm] = useState("");
+  const {
+    data: products,
+    isLoading,
+    isError,
+  } = useProducts({
+    page: currentPage,
+    limit: pageSize,
+    searchTerm,
+  });
+  const onPageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+  const onPageSizeChange = (limit: number) => {
+    setPageSize(limit);
+    setCurrentPage(1);
+  };
+
+  const onSearch = (data: FormValues) => {
+    setSearchTerm(data.searchTerm);
+    setCurrentPage(1);
+  };
+  const colors: IBadgeColortype[] = [
+    "success",
+    "primary",
+    "warning",
+    "info",
+    "error",
+    "dark",
+  ] as const;
   const [isChecked, setIsChecked] = useState<boolean>(false);
+  if (isError) {
+    return <div>Error loading products.</div>;
+  }
+  if (isLoading) {
+    return <div>Loading products...</div>;
+  }
   return (
     <>
       <nav className="mb-4">
@@ -89,6 +103,63 @@ const Products = () => {
         </ol>
       </nav>
       <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
+        {/* fileters */}
+        <div className="flex flex-col gap-2 mb-4 sm:flex-row sm:items-center sm:justify-between px-5 py-4 border-b border-gray-200 dark:border-white/[0.05]">
+          <button className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-theme-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
+            {/* Icon */}
+            <svg
+              className="stroke-current fill-white dark:fill-gray-800"
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+            >
+              <path
+                d="M2.29 5.904H17.707"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
+              <path
+                d="M17.708 14.096H2.291"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
+              <path
+                d="M12.083 3.333c1.42 0 2.571 1.151 2.571 2.571s-1.151 2.571-2.571 2.571-2.571-1.151-2.571-2.571 1.151-2.571 2.571-2.571Z"
+                strokeWidth="1.5"
+              />
+              <path
+                d="M7.917 11.525c-1.42 0-2.571 1.151-2.571 2.571s1.151 2.571 2.571 2.571 2.571-1.151 2.571-2.571-1.151-2.571-2.571-2.571Z"
+                strokeWidth="1.5"
+              />
+            </svg>
+            Filter
+          </button>
+
+          <Form onSubmit={handleSubmit(onSearch)}>
+            <div className="relative">
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                <svg
+                  className="fill-gray-500 dark:fill-gray-400"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    clipRule="evenodd"
+                    d="M3.042 9.374c0-3.497 2.835-6.332 6.333-6.332s6.334 2.835 6.334 6.332-2.836 6.332-6.334 6.332A6.334 6.334 0 0 1 3.042 9.374Zm6.333-7.832c-4.326 0-7.833 3.506-7.833 7.832s3.507 7.832 7.833 7.832c1.892 0 3.628-.671 4.982-1.787l2.82 2.82a.834.834 0 0 0 1.18-1.18l-2.82-2.82a7.799 7.799 0 0 0 1.851-4.865c0-4.326-3.507-7.832-7.833-7.832Z"
+                  />
+                </svg>
+              </span>
+              <input
+                {...register("searchTerm")}
+                type="text"
+                placeholder="Search..."
+                className="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-10 w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pr-4 pl-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-none xl:w-[300px] dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+              />
+            </div>
+          </Form>
+        </div>
         <div className="max-w-full overflow-x-auto">
           <Table>
             {/* Table Header */}
@@ -147,13 +218,13 @@ const Products = () => {
 
             {/* Table Body */}
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-              {products.map((product) => (
+              {products?.data.map((product) => (
                 <TableRow key={product.id}>
                   <TableCell className="px-5 py-4 sm:px-6 text-start">
                     <div className="flex items-center gap-2">
                       <Checkbox checked={isChecked} onChange={setIsChecked} />
                       <span className="block text-sm font-medium text-gray-700 dark:text-gray-400">
-                        {product.id}
+                        {product.sku}
                       </span>
                     </div>
                   </TableCell>
@@ -163,7 +234,7 @@ const Products = () => {
                         <img
                           width={40}
                           height={40}
-                          src={product.image}
+                          src={`${API_URL}/images/products/${product.thumbnail}`}
                           alt={product.name}
                         />
                       </div>
@@ -175,19 +246,49 @@ const Products = () => {
                     </div>
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {product.category}
+                    {product.categories.map((cat, idx) => {
+                      const color = colors[idx % colors.length];
+                      return (
+                        <Badge key={cat.slug} variant="light" color={color}>
+                          {cat.name}
+                        </Badge>
+                      );
+                    })}
                   </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    {product.price}
+                  <TableCell className="px-4 py-3 text-theme-sm">
+                    <div className="flex items-center gap-2">
+                      <span
+                        className={
+                          product.salePrice &&
+                          product.salePrice < product.regularPrice
+                            ? "line-through text-gray-400 dark:text-gray-500"
+                            : "text-gray-700 dark:text-gray-300"
+                        }
+                      >
+                        {product.regularPrice}
+                      </span>
+                      {product.salePrice &&
+                        product.salePrice < product.regularPrice && (
+                          <span className="text-green-600 dark:text-green-400 font-medium">
+                            {product.salePrice}
+                          </span>
+                        )}
+                      <Badge variant="light" color="error">
+                        {product.discount.discountValue}{" "}
+                        {product.discount.discountType === "percentage"
+                          ? "%"
+                          : "Off"}
+                      </Badge>{" "}
+                    </div>
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     <span
                       className={`inline-block px-2 py-1 rounded text-xs font-semibold ${
-                        product.status === "In Stock"
+                        product.stock > 0
                           ? "bg-green-100 text-green-700"
-                          : product.status === "Low Stock"
-                          ? "bg-yellow-100 text-yellow-700"
-                          : "bg-red-100 text-red-700"
+                          : product.stock <= 0
+                          ? "bg-red-100 text-red-700"
+                          : "bg-yellow-100 text-yellow-700"
                       }`}
                     >
                       {product.stock}
@@ -195,13 +296,15 @@ const Products = () => {
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     <Switch
+                      label=""
                       defaultChecked={product.isFeatured}
                       // onChange={handleSwitchChange}
                     />
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     <Switch
-                      defaultChecked={product.isFeatured}
+                      label=""
+                      defaultChecked={product.isPublished}
                       // onChange={handleSwitchChange}
                     />
                   </TableCell>
@@ -221,7 +324,7 @@ const Products = () => {
                       >
                         <DuplicateIcon className="w-5 h-5" />
                       </Link>
-                      <Link to={`/products/edit/${product.id}`} title="Edit">
+                      <Link to={`/products/edit/${product.slug}`} title="Edit">
                         <EditIcon className="w-5 h-5" />
                       </Link>
                       <Link
@@ -240,6 +343,14 @@ const Products = () => {
             </TableBody>
           </Table>
         </div>
+        {/* Pagination */}
+        <Pagination
+          currentPage={currentPage}
+          total={products?.meta?.total || 0}
+          limit={pageSize}
+          onPageChange={onPageChange}
+          onLimitChange={onPageSizeChange}
+        />
       </div>
     </>
   );
