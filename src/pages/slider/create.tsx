@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import ComponentCard from "../../components/common/ComponentCard";
 import Label from "../../components/form/Label";
 import Input from "../../components/form/input/InputField";
@@ -14,9 +14,9 @@ type FormValues = {
 
 const CreateSlider = () => {
   const {
-    register,
     handleSubmit,
     setValue,
+    control,
     formState: { errors },
   } = useForm<FormValues>({
     defaultValues: {
@@ -74,14 +74,18 @@ const CreateSlider = () => {
         {/* Link URL */}
         <div className="mb-6">
           <Label htmlFor="linkUrl">Link URL</Label>
-          <Input
-            id="linkUrl"
-            {...register("linkUrl", {
-              required: "Link URL is required",
-            })}
-            placeholder="Enter link URL"
-            min="2"
-            max="255"
+          <Controller
+            control={control}
+            name="linkUrl"
+            render={({ field }) => (
+              <Input
+                id="linkUrl"
+                {...field}
+                placeholder="Enter link URL"
+                min="2"
+                max="255"
+              />
+            )}
           />
           {errors.linkUrl && (
             <p className="mt-1 text-sm text-red-600">

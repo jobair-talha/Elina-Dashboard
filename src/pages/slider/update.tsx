@@ -1,10 +1,9 @@
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import ComponentCard from "../../components/common/ComponentCard";
 import Label from "../../components/form/Label";
 import Input from "../../components/form/input/InputField";
 import { useState, useEffect } from "react";
 import DropzoneComponent from "../../components/form/form-elements/DropZone";
-
 import { useUpdateSlider } from "../../services/mutations/slider/mutations";
 import { useSingleSlider } from "../../services/queries/slider";
 import { useParams } from "react-router";
@@ -18,7 +17,7 @@ type FormValues = {
 const UpdateSlider = () => {
   const { id } = useParams();
   const {
-    register,
+    control,
     handleSubmit,
     setValue,
     formState: { errors },
@@ -61,7 +60,7 @@ const UpdateSlider = () => {
       formData.append("image", sliderFiles[0]);
     }
     formData.append("linkUrl", data.linkUrl);
-    updateSlider({ id, payload: formData });
+    updateSlider({ id: id as string, payload: formData });
   };
 
   useEffect(() => {
@@ -85,14 +84,19 @@ const UpdateSlider = () => {
         {/* Link URL */}
         <div className="mb-6">
           <Label htmlFor="linkUrl">Link URL</Label>
-          <Input
-            id="linkUrl"
-            {...register("linkUrl", {
-              required: "Link URL is required",
-            })}
-            placeholder="Enter link URL"
-            min="2"
-            max="255"
+
+          <Controller
+            control={control}
+            name="linkUrl"
+            render={({ field }) => (
+              <Input
+                id="linkUrl"
+                {...field}
+                placeholder="Enter link URL"
+                min="2"
+                max="255"
+              />
+            )}
           />
           {errors.linkUrl && (
             <p className="mt-1 text-sm text-red-600">
