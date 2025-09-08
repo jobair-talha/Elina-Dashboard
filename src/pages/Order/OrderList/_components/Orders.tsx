@@ -14,6 +14,7 @@ import { IOrder } from '../../../../types/order';
 import ProductItem from './ProductItem';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
+import CourierAction from '../../../../components/actions/courier';
 
 interface Iprops {
   orders: IOrder[];
@@ -27,7 +28,7 @@ export default function Orders({ orders }: Iprops) {
   return (
     <>
       {/* Filters */}
-      <div className="flex flex-col gap-2 mb-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className=" flex flex-col gap-2 mb-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="relative">
           <button
             onClick={() => setFilterOpen((prev) => !prev)}
@@ -164,62 +165,68 @@ export default function Orders({ orders }: Iprops) {
       )}
 
       {/* Table */}
-      <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03] custom-scrollbar">
-        <div className="overflow-scroll max-w-screen max-h-screen">
-          <Table className="min-w-full border-collapse">
+      <div className="rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
+        <div className="max-w-screen overflow-x-scroll">
+          <Table className="border-collapse min-w-[1200px] ">
             <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
               <TableRow className="gap-x-2">
                 <TableCell
                   isHeader
-                  className="py-3 px-2 text-theme-xs text-start text-gray-500 dark:text-gray-400"
+                  className="py-3 pr-3 text-theme-xs text-start text-gray-500 dark:text-gray-400"
                 >
                   <Checkbox checked={true} onChange={() => {}} />
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="py-3 px-2 text-theme-xs text-start text-gray-500 dark:text-gray-400"
+                  className="py-3 pr-3 text-theme-xs text-start text-gray-500 dark:text-gray-400"
                 >
                   ID
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="py-3 px-1 text-theme-xs text-start text-gray-500 dark:text-gray-400"
+                  className="py-3 pr-3 text-theme-xs text-start text-gray-500 dark:text-gray-400"
                 >
                   Products
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="whitespace-nowrap py-3 px-2 text-theme-xs text-start text-gray-500 dark:text-gray-400"
+                  className="whitespace-nowrap py-3 pr-3 text-theme-xs text-start text-gray-500 dark:text-gray-400"
                 >
                   Customer Info
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="whitespace-nowrap py-3 px-2 text-theme-xs text-start text-gray-500 dark:text-gray-400"
+                  className="whitespace-nowrap py-3 pr-3 text-theme-xs text-start text-gray-500 dark:text-gray-400"
                 >
                   Shipping Info
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="py-3 px-2 text-theme-xs text-start text-gray-500 dark:text-gray-400"
+                  className="py-3 pr-3 text-theme-xs text-start text-gray-500 dark:text-gray-400"
                 >
                   Order Info
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="whitespace-nowrap py-3 px-3 text-theme-xs text-start text-gray-500 dark:text-gray-400"
+                  className="whitespace-nowrap py-3 pr-3 text-theme-xs text-start text-gray-500 dark:text-gray-400"
                 >
                   Payment Info
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="py-3 px-1 text-theme-xs text-center text-gray-500 dark:text-gray-400"
+                  className="whitespace-nowrap py-3 pr-3 text-theme-xs text-start text-gray-500 dark:text-gray-400"
+                >
+                  Activity
+                </TableCell>
+                <TableCell
+                  isHeader
+                  className="py-3 pr-3 text-theme-xs text-gray-500 text-left dark:text-gray-400"
                 >
                   Status
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="py-3 px-1 text-theme-xs text-start text-gray-500 dark:text-gray-400"
+                  className="py-3 pr-3 text-theme-xs text-start text-gray-500 dark:text-gray-400"
                 >
                   Courier
                 </TableCell>
@@ -235,20 +242,20 @@ export default function Orders({ orders }: Iprops) {
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
               {orders.map((order) => (
                 <TableRow key={order.id} className="gap-x-2">
-                  <TableCell className="py-3 px-2">
+                  <TableCell className="py-3 pr-3">
                     <Checkbox
                       checked={false}
                       onChange={() => {}}
                       id={`checkbox-${order.id}`}
                     />
                   </TableCell>
-                  <TableCell className="whitespace-nowrap py-3 px-2 text-gray-500 text-theme-sm dark:text-gray-400">
+                  <TableCell className="whitespace-nowrap py-3 pr-3 text-gray-500 text-theme-sm dark:text-gray-400">
                     {order.serial}
                   </TableCell>
-                  <TableCell className="py-3 px-">
+                  <TableCell className="py-3 pr-3">
                     <ProductItem orderProducts={order.products} />
                   </TableCell>
-                  <TableCell className="py-3 px-2 text-theme-sm text-gray-500 dark:text-gray-400">
+                  <TableCell className="py-3 pr-3 text-theme-sm text-gray-500 dark:text-gray-400">
                     <p className="text-gray-800 dark:text-white/90">
                       {order.customerInfo.name}
                     </p>
@@ -266,7 +273,7 @@ export default function Orders({ orders }: Iprops) {
                       {order.customerInfo.address}
                     </p>
                   </TableCell>
-                  <TableCell className="py-3 px-2 text-theme-sm text-gray-500 dark:text-gray-400">
+                  <TableCell className="py-3 pr-3 text-theme-sm text-gray-500 dark:text-gray-400">
                     <p className="text-gray-800 dark:text-white/90">
                       {order.shippingInfo.name}
                     </p>
@@ -284,7 +291,7 @@ export default function Orders({ orders }: Iprops) {
                       {order.shippingInfo.address}
                     </p>
                   </TableCell>
-                  <TableCell className="whitespace-nowrap py-3 px-2 text-theme-sm text-gray-500 dark:text-gray-400">
+                  <TableCell className="whitespace-nowrap py-3 pr-3 text-theme-sm text-gray-500 dark:text-gray-400">
                     <p className="text-gray-800 dark:text-white/90">
                       Price: {order.totalProductsPrice}৳
                     </p>
@@ -296,7 +303,7 @@ export default function Orders({ orders }: Iprops) {
                     <p>Pay: {order.payAmount}৳</p>
                     <p>Due: {order.remainingPayableAmount}৳</p>
                   </TableCell>
-                  <TableCell className="py-3 px-1">
+                  <TableCell className="py-3 pr-3">
                     <Badge
                       size="sm"
                       color={
@@ -310,9 +317,14 @@ export default function Orders({ orders }: Iprops) {
                       Paid
                     </Badge>
                   </TableCell>
-                  <TableCell className="py-3 px-1">
+
+                  <TableCell className="whitespace-nowrap py-3 pr-2 text-center">
+                    <CourierAction/>
+                  </TableCell>
+
+                  <TableCell className="py-3 pr-2">
                     <div>
-                      <select className="text-xs text-gray-600 uppercase outline-0 cursor-pointer bg-transparent dark:text-gray-400">
+                      <select className="text-xs text-gray-600 uppercase outline-0 cursor-pointer bg-transparent mr-0 dark:text-gray-400">
                         <option
                           value="applied"
                           className="text-xs cursor-pointer"
@@ -340,7 +352,7 @@ export default function Orders({ orders }: Iprops) {
                       </select>
                     </div>
                   </TableCell>
-                  <TableCell className="py-3 px-1 text-center">
+                  <TableCell className="py-3 pr-2 text-center">
                     <Badge
                       size="sm"
                       color={
@@ -354,7 +366,7 @@ export default function Orders({ orders }: Iprops) {
                       {order.status}
                     </Badge>
                   </TableCell>
-                  <TableCell className="py-3 px-1 flex justify-center items-center text-theme-sm text-gray-500 dark:text-gray-400">
+                  <TableCell className="py-3 pr-2 flex justify-center items-center text-theme-sm text-gray-500 dark:text-gray-400">
                     {' '}
                     <div className="flex flex-col gap-3">
                       {' '}
