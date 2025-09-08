@@ -21,6 +21,8 @@ const CategoryList = () => {
   const { data, isLoading, isError } = useAllCategories({});
   const { mutate: deleteCategory } = useDeleteCategory();
 
+  console.log(data)
+
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error loading sliders</div>;
 

@@ -16,8 +16,8 @@ type FormValues = {
   categoryName: string;
   categoryImage: FileList | null;
   adsBannerImage: FileList | null;
-  isFeatured: boolean;
-  isPublished: boolean | null;
+  isFeatured: string;
+  isPublished: string;
   metaTitle: string;
   metaDescription: string;
   metaImage: FileList | null;
@@ -27,16 +27,16 @@ const CreateCategory = () => {
   const {
     register,
     handleSubmit,
-    control,
     setValue,
+    control,
     formState: { errors },
   } = useForm<FormValues>({
     defaultValues: {
-      categoryName: "",
-      isFeatured: false,
-      isPublished: false,
-      metaTitle: "",
-      metaDescription: "",
+      categoryName: '',
+      isFeatured: '',
+      isPublished: '',
+      metaTitle: '',
+      metaDescription: '',
       metaImage: null,
     },
   });
@@ -124,6 +124,7 @@ const CreateCategory = () => {
   });
 
   const onSubmit = (data: FormValues) => {
+
     const formData = new FormData();
     if (categoryImageFiles.length === 0) {
       toast.error("No files selected");
@@ -135,7 +136,10 @@ const CreateCategory = () => {
     if (categoryImageFiles.length > 0) {
       formData.append("image", categoryImageFiles[0]);
     }
+
     formData.append("name", data.categoryName);
+    formData.append('isFeatured', data.isFeatured);
+    formData.append('isPublished', data.isPublished);
     formData.append(
       "slug",
       data.categoryName.toLowerCase().replace(/\s+/g, "-")
@@ -174,15 +178,21 @@ const CreateCategory = () => {
 
             <div className="mb-4">
               <Label htmlFor="categoryName">Category Name</Label>
-              <Input
-                id="categoryName"
-                {...register("categoryName", {
-                  required: "Category name is required",
-                })}
-                min="3"
-                max="100"
-                placeholder="Enter category name"
+
+              <Controller
+                control={control}
+                name="categoryName"
+                render={({ field }) => (
+                  <Input
+                    id="categoryName"
+                    {...field}
+                    min="3"
+                    max="100"
+                    placeholder="Enter category name"
+                  />
+                )}
               />
+
               {errors.categoryName && (
                 <p className="mt-1 text-red-600 text-sm">
                   {errors.categoryName.message}
@@ -223,7 +233,7 @@ const CreateCategory = () => {
                 id="metaTitle"
                 minLength={3}
                 maxLength={100}
-                {...register("metaTitle")}
+                {...register('metaTitle')}
                 placeholder="Enter meta title"
               />
             </div>
@@ -254,10 +264,10 @@ const CreateCategory = () => {
                 className={`border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center cursor-pointer transition-colors
                 ${
                   isCategoryDragActive
-                    ? "border-brand-500 bg-gray-100 dark:bg-gray-800"
-                    : "border-gray-300 bg-gray-50 dark:border-gray-700 dark:bg-gray-900"
+                    ? 'border-brand-500 bg-gray-100 dark:bg-gray-800'
+                    : 'border-gray-300 bg-gray-50 dark:border-gray-700 dark:bg-gray-900'
                 }`}
-                style={{ minHeight: "220px" }}
+                style={{ minHeight: '220px' }}
               >
                 <input {...getCategoryInputProps()} />
                 {categoryImagePreview ? (
@@ -282,10 +292,10 @@ const CreateCategory = () => {
                 className={`border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center cursor-pointer transition-colors
                 ${
                   isAdsDragActive
-                    ? "border-brand-500 bg-gray-100 dark:bg-gray-800"
-                    : "border-gray-300 bg-gray-50 dark:border-gray-700 dark:bg-gray-900"
+                    ? 'border-brand-500 bg-gray-100 dark:bg-gray-800'
+                    : 'border-gray-300 bg-gray-50 dark:border-gray-700 dark:bg-gray-900'
                 }`}
-                style={{ minHeight: "220px" }}
+                style={{ minHeight: '220px' }}
               >
                 <input {...getAdsInputProps()} />
                 {adsBannerPreview ? (
