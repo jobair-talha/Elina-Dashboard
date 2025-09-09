@@ -5,13 +5,18 @@ import ComponentCard from "../../components/common/ComponentCard";
 import Switch from "../../components/form/switch/Switch";
 import Select from "../../components/form/Select";
 import TextArea from "../../components/form/input/TextArea";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
-import {  useAllCategories, useSingleCategory } from "../../services/queries/caregories";
-import toast from "react-hot-toast";
-import {  useUpdateCategory } from "../../services/mutations/categories/categories";
+import {
+  useAllCategories,
+  useSingleCategory,
+} from "../../services/queries/caregories";
+import { useUpdateCategory } from "../../services/mutations/categories/categories";
 import { useParams } from "react-router";
-import { getAllCategory, getSingleCategory } from "../../services/api/categories";
+
+import { API_URL } from "../../config";
+import { Option } from "../../types/global";
+import { Category } from "../../types/categories";
 
 type FormValues = {
   parentCategory: string;
@@ -19,20 +24,21 @@ type FormValues = {
   categoryImage: FileList | null;
   adsBannerImage: FileList | null;
   isFeatured: boolean;
-  isPublished: boolean | null;
+  isPublished: boolean;
   metaTitle: string;
   metaDescription: string;
   metaImage: FileList | null;
 };
 
 const UpdateCategory = () => {
-    const { slug } = useParams();
-    
+  const { slug } = useParams();
+
   const {
     register,
     handleSubmit,
     control,
     setValue,
+    watch,
     formState: { errors },
   } = useForm<FormValues>({
     defaultValues: {
@@ -45,10 +51,14 @@ const UpdateCategory = () => {
     },
   });
 
-  const { data: category_data } = useSingleCategory(slug as string);
- const { data: category} = useAllCategories({});
+  const { data: categoryData, isSuccess: isCategoryDataSuccess } =
+    useSingleCategory(slug as string);
+  const { data: category, isSuccess: categorySuccess } = useAllCategories({
+    limit: 100,
+    page: 1,
+  });
 
-    const { mutate: updateCategory,  isPending  } = useUpdateCategory();
+  const { mutate: updateCategory, isPending } = useUpdateCategory();
 
   // State to store the files and preview URLs for Category Image
   const [categoryImageFiles, setCategoryImageFiles] = useState<File[]>([]);
@@ -129,33 +139,64 @@ const UpdateCategory = () => {
     },
   });
 
- const onSubmit = (data: FormValues) => {
-   const formData = new FormData();
+  const onSubmit = (data: FormValues) => {
+    const formData = new FormData();
 
-   // ✅ only append if user uploaded a new image
-   if (categoryImageFiles.length > 0) {
-     formData.append('image', categoryImageFiles[0]);
-   }
+    // ✅ only append if user uploaded a new image
+    if (categoryImageFiles.length > 0) {
+      formData.append("image", categoryImageFiles[0]);
+    }
 
-   if (adsBannerFiles.length > 0) {
-     formData.append('adsBannerImage', adsBannerFiles[0]);
-   }
+    if (adsBannerFiles.length > 0) {
+      formData.append("adsBannerImage", adsBannerFiles[0]);
+    }
 
-   formData.append('name', data.categoryName);
+    formData.append("name", data.categoryName);
 
-   if (data.parentCategory) {
-     formData.append('parentCategory', data.parentCategory);
-   }
-   updateCategory(
-     { id: slug as string, payload: formData }
-   );
- };
+    if (data.parentCategory) {
+      formData.append("parentId", data.parentCategory);
+    }
+    formData.append("isFeatured", String(data.isFeatured));
+    formData.append("isPublished", String(data.isPublished));
+    formData.append("metaTitle", data.metaTitle);
+    formData.append("metaDescription", data.metaDescription);
+    updateCategory({ id: slug as string, payload: formData });
+  };
 
+  useEffect(() => {
+    if (isCategoryDataSuccess) {
+      setValue("categoryName", categoryData.data.name);
+      setValue("isFeatured", categoryData.data.isFeatured);
+      setValue("metaTitle", categoryData.data.metaTitle || "");
+      setValue("metaDescription", categoryData.data.metaDescription || "");
+      setValue("isPublished", categoryData.data.isPublished);
+      setValue("parentCategory", categoryData.data.parentId as string);
+      setCategoryImagePreview(
+        `${API_URL}/images/category/${categoryData.data.image}`
+      );
+      setAdsBannerPreview(
+        `${API_URL}/images/category/${categoryData.data.adsBanner}`
+      );
+    }
+  }, [isCategoryDataSuccess]);
 
-   
+  const buildCategoryOptions = (categories: Category[]): Option[] => {
+    return categories.flatMap((cat) => {
+      const current = { value: cat._id, label: cat.name };
+
+      // If has children, recursively add them
+      const children = cat.children ? buildCategoryOptions(cat.children) : [];
+
+      return [current, ...children];
+    });
+  };
+
+  const categoryOptions = useCallback(() => {
+    return category?.data ? buildCategoryOptions(category.data) : [];
+  }, [category, categorySuccess]);
 
   return (
-    <ComponentCard title="Update Category" className="max-w-5xl mx-auto">
+    <ComponentCard title="Create Category" className="max-w-5xl mx-auto">
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
           {/* Left side - dropzones with previews */}
@@ -168,13 +209,9 @@ const UpdateCategory = () => {
                 render={({ field }) => (
                   <Select
                     {...field}
-                    options={
-                      category?.data.map((cat) => ({
-                        value: cat._id,
-                        label: cat.name,
-                      })) || []
-                    }
+                    options={categoryOptions()}
                     placeholder="Select parent category"
+                    value={field.value}
                   />
                 )}
               />
@@ -182,15 +219,22 @@ const UpdateCategory = () => {
 
             <div className="mb-4">
               <Label htmlFor="categoryName">Category Name</Label>
-              <Input
-                id="categoryName"
-                {...register('categoryName', {
-                  required: 'Category name is required',
-                })}
-                min="3"
-                max="100"
-                placeholder="Enter category name"
+
+              <Controller
+                control={control}
+                name="categoryName"
+                rules={{ required: "Category name is required" }}
+                render={({ field }) => (
+                  <Input
+                    id="categoryName"
+                    {...field}
+                    min="3"
+                    max="100"
+                    placeholder="Enter category name"
+                  />
+                )}
               />
+
               {errors.categoryName && (
                 <p className="mt-1 text-red-600 text-sm">
                   {errors.categoryName.message}
@@ -213,7 +257,7 @@ const UpdateCategory = () => {
             </div>
             <div className="mb-4">
               <Controller
-                name="isFeatured"
+                name="isPublished"
                 control={control}
                 render={({ field }) => (
                   <Switch
@@ -229,9 +273,9 @@ const UpdateCategory = () => {
               <Label htmlFor="metaTitle">Meta Title</Label>
               <Input
                 id="metaTitle"
-                min="3"
-                max="100"
-                {...register('metaTitle')}
+                minLength={3}
+                maxLength={100}
+                {...register("metaTitle")}
                 placeholder="Enter meta title"
               />
             </div>
@@ -262,10 +306,10 @@ const UpdateCategory = () => {
                 className={`border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center cursor-pointer transition-colors
                 ${
                   isCategoryDragActive
-                    ? 'border-brand-500 bg-gray-100 dark:bg-gray-800'
-                    : 'border-gray-300 bg-gray-50 dark:border-gray-700 dark:bg-gray-900'
+                    ? "border-brand-500 bg-gray-100 dark:bg-gray-800"
+                    : "border-gray-300 bg-gray-50 dark:border-gray-700 dark:bg-gray-900"
                 }`}
-                style={{ minHeight: '220px' }}
+                style={{ minHeight: "220px" }}
               >
                 <input {...getCategoryInputProps()} />
                 {categoryImagePreview ? (
@@ -290,10 +334,10 @@ const UpdateCategory = () => {
                 className={`border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center cursor-pointer transition-colors
                 ${
                   isAdsDragActive
-                    ? 'border-brand-500 bg-gray-100 dark:bg-gray-800'
-                    : 'border-gray-300 bg-gray-50 dark:border-gray-700 dark:bg-gray-900'
+                    ? "border-brand-500 bg-gray-100 dark:bg-gray-800"
+                    : "border-gray-300 bg-gray-50 dark:border-gray-700 dark:bg-gray-900"
                 }`}
-                style={{ minHeight: '220px' }}
+                style={{ minHeight: "220px" }}
               >
                 <input {...getAdsInputProps()} />
                 {adsBannerPreview ? (
@@ -316,11 +360,10 @@ const UpdateCategory = () => {
         <div className="w-full mt-6 lg:mt-0 lg:w-auto lg:self-start text-center">
           <button
             type="submit"
-            className="disp w-full lg:w-auto rounded bg-brand-500 px-6 py-3 text-white hover:bg-brand-600 dark:bg-brand-400 dark:hover:bg-brand-500 transition"
+            className="w-full lg:w-auto rounded bg-brand-500 px-6 py-3 text-white hover:bg-brand-600 dark:bg-brand-400 dark:hover:bg-brand-500 transition"
           >
-            Update Category
+            {isPending ? "Updating..." : "Update Category"}
           </button>
-        
         </div>
       </form>
     </ComponentCard>
