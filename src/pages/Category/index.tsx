@@ -21,7 +21,7 @@ const CategoryList = () => {
   const { data, isLoading, isError } = useAllCategories({});
   const { mutate: deleteCategory } = useDeleteCategory();
 
-  console.log(data)
+  console.log(data);
 
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error loading sliders</div>;
@@ -84,10 +84,10 @@ const CategoryList = () => {
             {parentName ?? "—"}
           </TableCell>
           <TableCell className="px-5 py-4 text-start">
-            <Switch defaultChecked={category.isFeatured} label="" />
+            <Switch checked={category.isFeatured} label="" />
           </TableCell>
           <TableCell className="px-5 py-4 text-start">
-            <Switch defaultChecked={category.isFeatured} label="" />
+            <Switch checked={category.isPublished} label="" />
           </TableCell>
           <TableCell className="px-5 py-4 text-start">
             <div className="flex items-center gap-2">
