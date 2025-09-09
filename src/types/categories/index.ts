@@ -1,9 +1,10 @@
 export type Category = {
-        parentId: string | null;
+        parentId: string | Category | null;
         name: string;
         slug: string;
         image: string;
         isFeatured: boolean;
+        isPublished: boolean;
         adsBanner: string;
         metaTitle: string;
         metaDescription: string;
