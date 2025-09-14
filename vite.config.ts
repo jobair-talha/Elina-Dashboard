@@ -15,4 +15,17 @@ export default defineConfig({
       },
     }),
   ],
+  server: {
+    port: 7009,
+    open: true,
+    cors: true,
+  },
+  build: {
+    outDir: "build",
+    sourcemap: true,
+  },
+  preview: {
+    port: 7009,
+    host: "0.0.0.0",
+  },
 });
