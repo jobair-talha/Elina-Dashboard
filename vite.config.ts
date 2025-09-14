@@ -19,6 +19,7 @@ export default defineConfig({
     port: 7009,
     open: true,
     cors: true,
+    host: "0.0.0.0",
   },
   build: {
     outDir: "build",
