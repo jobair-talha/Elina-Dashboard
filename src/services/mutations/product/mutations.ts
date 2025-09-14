@@ -2,7 +2,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router";
 import { AxiosError } from "axios";
-import { deleteSlider } from "../../api/slider";
 import { ErrorResponse } from "../../../types/api";
 import { createProduct, deleteProduct, updateProduct } from "../../api/product";
 import { IProduct } from "../../../types/product";

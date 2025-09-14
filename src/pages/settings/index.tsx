@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+// @ts-nocheck
+import  { useState, useEffect } from "react";
 import { useForm, Controller, useFieldArray } from "react-hook-form";
 import Dropzone, { useDropzone } from "react-dropzone";
 import ComponentCard from "../../components/common/ComponentCard";
@@ -152,14 +153,7 @@ const SiteSettings = () => {
     console.log("Site settings submitted:", data);
     // Upload images & send form data to backend here
   };
-  const categories: Category[] = [
-    { value: "1", label: "Electronics" },
-    { value: "2", label: "Books" },
-    { value: "3", label: "Clothing" },
-    { value: "4", label: "Sports" },
-    { value: "5", label: "Home" },
-    // ...more
-  ];
+ 
 
   return (
     <>

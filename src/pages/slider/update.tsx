@@ -32,7 +32,7 @@ const UpdateSlider = () => {
   const [sliderFiles, setSliderFiles] = useState<File[]>([]);
   const [sliderPreview, setSliderPreview] = useState<string | null>(null);
 
-  const { data: sliderData, isSuccess } = useSingleSlider(id);
+  const { data: sliderData, isSuccess } = useSingleSlider(id as string);
   const { mutate: updateSlider, isPending } = useUpdateSlider();
   useEffect(() => {
     if (sliderFiles.length === 0) {
