@@ -1,20 +1,20 @@
-import { useState } from 'react';
+import { useState } from "react";
 import {
   Table,
   TableBody,
   TableCell,
   TableHeader,
   TableRow,
-} from '../../../../components/ui/table';
-import Badge from '../../../../components/ui/badge/Badge';
-import Form from '../../../../components/form/Form';
-import Checkbox from '../../../../components/form/input/Checkbox';
-import { Link } from 'react-router';
-import { IOrder } from '../../../../types/order';
-import ProductItem from './ProductItem';
-import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css';
-import CourierAction from '../../../../components/actions/courier';
+} from "../../../../components/ui/table";
+import Badge from "../../../../components/ui/badge/Badge";
+import Form from "../../../../components/form/Form";
+import Checkbox from "../../../../components/form/input/Checkbox";
+import { Link } from "react-router";
+import { IOrder } from "../../../../types/order";
+import ProductItem from "./ProductItem";
+import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css";
+import CourierAction from "../../../../components/actions/courier";
 
 interface Iprops {
   orders: IOrder[];
@@ -152,7 +152,7 @@ export default function Orders({ orders }: Iprops) {
               </button>
               <button
                 onClick={() => {
-                  console.log('Apply filter');
+                  console.log("Apply filter");
                   setCalendarOpen(false);
                 }}
                 className="px-4 py-2 text-sm rounded-lg bg-blue-600 text-white hover:bg-blue-700"
@@ -261,7 +261,7 @@ export default function Orders({ orders }: Iprops) {
                     </p>
                     <Link
                       to={`tel:${
-                        order.customerInfo.mobile.startsWith('+880')
+                        order.customerInfo.mobile.startsWith("+880")
                           ? order.customerInfo.mobile
                           : `+880${order.customerInfo.mobile}`
                       }`}
@@ -279,7 +279,7 @@ export default function Orders({ orders }: Iprops) {
                     </p>
                     <Link
                       to={`tel:${
-                        order.shippingInfo.mobile.startsWith('+88')
+                        order.shippingInfo.mobile.startsWith("+88")
                           ? order.shippingInfo.mobile
                           : `+88${order.shippingInfo.mobile}`
                       }`}
@@ -307,11 +307,11 @@ export default function Orders({ orders }: Iprops) {
                     <Badge
                       size="sm"
                       color={
-                        order.orderStatus === 'delivered'
-                          ? 'success'
-                          : order.orderStatus === 'pending'
-                          ? 'warning'
-                          : 'error'
+                        order.orderStatus === "delivered"
+                          ? "success"
+                          : order.orderStatus === "pending"
+                          ? "warning"
+                          : "error"
                       }
                     >
                       Paid
@@ -319,7 +319,7 @@ export default function Orders({ orders }: Iprops) {
                   </TableCell>
 
                   <TableCell className="whitespace-nowrap py-3 pr-2 text-center">
-                    <CourierAction/>
+                    <CourierAction />
                   </TableCell>
 
                   <TableCell className="py-3 pr-2">
@@ -356,44 +356,44 @@ export default function Orders({ orders }: Iprops) {
                     <Badge
                       size="sm"
                       color={
-                        order.status === 'Delivered'
-                          ? 'success'
-                          : order.status === 'Pending'
-                          ? 'warning'
-                          : 'error'
+                        order.orderStatus === "delivered"
+                          ? "success"
+                          : order.orderStatus === "pending"
+                          ? "warning"
+                          : "error"
                       }
                     >
-                      {order.status}
+                      {order.orderStatus}
                     </Badge>
                   </TableCell>
                   <TableCell className="py-3 pr-2 flex justify-center items-center text-theme-sm text-gray-500 dark:text-gray-400">
-                    {' '}
+                    {" "}
                     <div className="flex flex-col gap-3">
-                      {' '}
-                      {/* Note Icon */}{' '}
+                      {" "}
+                      {/* Note Icon */}{" "}
                       <Link
                         to="#"
                         title="Note"
                         className="text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
                       >
-                        {' '}
+                        {" "}
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           fill="currentColor"
                           viewBox="0 0 24 24"
                           className="w-[14px] h-[14px]"
                         >
-                          {' '}
-                          <path d="M5 2a2 2 0 0 0-2 2v16c0 1.104.896 2 2 2h14a2 2 0 0 0 2-2V8l-6-6H5zm7 7V3.5L18.5 9H12zM7 14h10v2H7v-2zm0-4h10v2H7v-2z" />{' '}
-                        </svg>{' '}
-                      </Link>{' '}
-                      {/* Edit Icon */}{' '}
+                          {" "}
+                          <path d="M5 2a2 2 0 0 0-2 2v16c0 1.104.896 2 2 2h14a2 2 0 0 0 2-2V8l-6-6H5zm7 7V3.5L18.5 9H12zM7 14h10v2H7v-2zm0-4h10v2H7v-2z" />{" "}
+                        </svg>{" "}
+                      </Link>{" "}
+                      {/* Edit Icon */}{" "}
                       <Link
                         to="#"
                         title="Edit"
                         className="text-gray-500 hover:text-green-600 dark:text-gray-400 dark:hover:text-white"
                       >
-                        {' '}
+                        {" "}
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           className="w-[14px] h-[14px]"
@@ -402,79 +402,79 @@ export default function Orders({ orders }: Iprops) {
                           stroke="currentColor"
                           strokeWidth="2"
                         >
-                          {' '}
+                          {" "}
                           <path
                             strokeLinecap="round"
                             strokeLinejoin="round"
                             d="M15.232 5.232l3.536 3.536M4 20h4l10.293-10.293a1 1 0 000-1.414l-3.586-3.586a1 1 0 00-1.414 0L4 16v4z"
-                          />{' '}
-                        </svg>{' '}
-                      </Link>{' '}
-                      {/* Delete Icon */}{' '}
+                          />{" "}
+                        </svg>{" "}
+                      </Link>{" "}
+                      {/* Delete Icon */}{" "}
                       <Link
                         to="#"
                         title="Delete"
                         className="text-gray-500 hover:text-red-600 dark:text-gray-400 dark:hover:text-white"
                       >
-                        {' '}
+                        {" "}
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           className="w-[14px] h-[14px]"
                           fill="currentColor"
                           viewBox="0 0 24 24"
                         >
-                          {' '}
-                          <path d="M5.755 20.283 4 8h16l-1.755 12.283A2 2 0 0 1 16.265 22h-8.53a2 2 0 0 1-1.98-1.717zM21 4h-5V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v1H3a1 1 0 0 0 0 2h18a1 1 0 0 0 0-2z" />{' '}
-                        </svg>{' '}
-                      </Link>{' '}
-                      {/* Dropdown Menu (3 Dots) */}{' '}
+                          {" "}
+                          <path d="M5.755 20.283 4 8h16l-1.755 12.283A2 2 0 0 1 16.265 22h-8.53a2 2 0 0 1-1.98-1.717zM21 4h-5V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v1H3a1 1 0 0 0 0 2h18a1 1 0 0 0 0-2z" />{" "}
+                        </svg>{" "}
+                      </Link>{" "}
+                      {/* Dropdown Menu (3 Dots) */}{" "}
                       <div className="relative group">
-                        {' '}
+                        {" "}
                         <button
                           type="button"
                           className="text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white"
                           title="More options"
                         >
-                          {' '}
+                          {" "}
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             className="w-[16px] h-[16px]"
                             fill="currentColor"
                             viewBox="0 0 20 20"
                           >
-                            {' '}
-                            <circle cx="10" cy="3.5" r="1.5" />{' '}
-                            <circle cx="10" cy="10" r="1.5" />{' '}
-                            <circle cx="10" cy="16.5" r="1.5" />{' '}
-                          </svg>{' '}
-                        </button>{' '}
-                        {/* Dropdown Menu */}{' '}
+                            {" "}
+                            <circle cx="10" cy="3.5" r="1.5" />{" "}
+                            <circle cx="10" cy="10" r="1.5" />{" "}
+                            <circle cx="10" cy="16.5" r="1.5" />{" "}
+                          </svg>{" "}
+                        </button>{" "}
+                        {/* Dropdown Menu */}{" "}
                         <div className="absolute right-0 z-10 hidden w-32 mt-2 bg-white border rounded-md shadow-lg group-hover:block dark:bg-gray-800 dark:border-gray-700">
-                          {' '}
+                          {" "}
                           <Link
                             to="#"
                             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
                           >
-                            {' '}
-                            View Details{' '}
-                          </Link>{' '}
+                            {" "}
+                            View Details{" "}
+                          </Link>{" "}
                           <Link
                             to="#"
                             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
                           >
-                            {' '}
-                            Archive{' '}
-                          </Link>{' '}
+                            {" "}
+                            Archive{" "}
+                          </Link>{" "}
                           <Link
                             to="#"
                             className="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-700"
                           >
-                            {' '}
-                            Remove{' '}
-                          </Link>{' '}
-                        </div>{' '}
-                      </div>{' '}
-                    </div>{' '}
+                            {" "}
+                            Remove{" "}
+                          </Link>{" "}
+                        </div>{" "}
+                      </div>{" "}
+                    </div>{" "}
                   </TableCell>
                 </TableRow>
               ))}
