@@ -16,6 +16,7 @@ export default defineConfig({
     }),
   ],
   server: {
+    allowedHosts: ['admin.eliana.com.bd'],
     port: 7009,
     host: "0.0.0.0",
   },
