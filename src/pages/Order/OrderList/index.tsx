@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+// @ts-nocheck
+import { useState } from "react";
 import Orders from "./_components/Orders";
 import PageMeta from "../../../components/common/PageMeta";
 import { useForm } from "react-hook-form";

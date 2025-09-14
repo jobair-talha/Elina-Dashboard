@@ -38,7 +38,6 @@ const UpdateCategory = () => {
     handleSubmit,
     control,
     setValue,
-    watch,
     formState: { errors },
   } = useForm<FormValues>({
     defaultValues: {
