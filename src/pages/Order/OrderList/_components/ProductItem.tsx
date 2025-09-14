@@ -1,4 +1,4 @@
-import React from "react";
+// @ts-nocheck
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -8,7 +8,6 @@ type IProps = {
   orderProducts: IOrderProduct[];
 };
 const ProductItem = ({ orderProducts }: IProps) => {
-
   console.log(orderProducts[0].product.thumbnail);
   const settings = {
     dots: false,

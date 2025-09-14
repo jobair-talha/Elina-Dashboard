@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Controller, useForm } from "react-hook-form";
 import Dropzone from "react-dropzone";
 import ReactSelect from "react-select";

@@ -79,7 +79,7 @@ const Products = () => {
               className="flex items-center gap-1 text-sm text-gray-500 hover:text-brand-500 dark:text-gray-400 dark:hover:text-brand-400"
             >
               <svg
-                class="fill-current"
+                className="fill-current"
                 width="16"
                 height="16"
                 viewBox="0 0 16 16"
