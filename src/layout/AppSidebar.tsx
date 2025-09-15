@@ -21,7 +21,6 @@ import {
   UserCircleIcon,
 } from "../icons";
 import { useSidebar } from "../context/SidebarContext";
-import SidebarWidget from "./SidebarWidget";
 
 type NavItem = {
   name: string;
@@ -33,74 +32,74 @@ type NavItem = {
 const navItems: NavItem[] = [
   {
     icon: <GridIcon />,
-    name: 'Dashboard',
-    subItems: [{ name: 'Ecommerce', path: '/', pro: false }],
+    name: "Dashboard",
+    subItems: [{ name: "Ecommerce", path: "/", pro: false }],
   },
   {
     icon: <OrderIcon />,
-    name: 'Order',
+    name: "Order",
     subItems: [
-      { name: 'POS Order', path: '/pos-order', pro: false },
-      { name: 'Order List', path: '/order', pro: false },
+      { name: "POS Order", path: "/pos-order", pro: false },
+      { name: "Order List", path: "/order", pro: false },
     ],
   },
   {
     icon: <ProductIcon />,
-    name: 'Products',
+    name: "Products",
     subItems: [
-      { name: 'Product List', path: '/product-list', pro: false },
-      { name: 'Alert Products', path: '/alert-products', pro: false },
-      { name: 'New Product', path: '/new-product', pro: false },
+      { name: "Product List", path: "/product-list", pro: false },
+      { name: "Alert Products", path: "/alert-products", pro: false },
+      { name: "New Product", path: "/new-product", pro: false },
     ],
   },
   {
     icon: <CategoryIcon />,
-    name: 'Categories',
+    name: "Categories",
     subItems: [
-      { name: 'Category List', path: '/category-list', pro: false },
-      { name: 'New Category', path: '/new-category', pro: false }
+      { name: "Category List", path: "/category-list", pro: false },
+      { name: "New Category", path: "/new-category", pro: false },
     ],
   },
   {
     icon: <SliderIcon />,
-    name: 'Sliders',
+    name: "Sliders",
     subItems: [
-      { name: 'Slider List', path: '/slider-list', pro: false },
-      { name: 'New Slider', path: '/new-slider', pro: false },
+      { name: "Slider List", path: "/slider-list", pro: false },
+      { name: "New Slider", path: "/new-slider", pro: false },
     ],
   },
   {
     icon: <CalenderIcon />,
-    name: 'Calendar',
-    path: '/calendar',
+    name: "Calendar",
+    path: "/calendar",
   },
   {
     icon: <UserCircleIcon />,
-    name: 'User Profile',
-    path: '/profile',
+    name: "User Profile",
+    path: "/profile",
   },
   {
-    name: 'Forms',
+    name: "Forms",
     icon: <ListIcon />,
-    subItems: [{ name: 'Form Elements', path: '/form-elements', pro: false }],
+    subItems: [{ name: "Form Elements", path: "/form-elements", pro: false }],
   },
   {
-    name: 'Tables',
+    name: "Tables",
     icon: <TableIcon />,
-    subItems: [{ name: 'Basic Tables', path: '/basic-tables', pro: false }],
+    subItems: [{ name: "Basic Tables", path: "/basic-tables", pro: false }],
   },
   {
-    name: 'Pages',
+    name: "Pages",
     icon: <PageIcon />,
     subItems: [
-      { name: 'Blank Page', path: '/blank', pro: false },
-      { name: '404 Error', path: '/error-404', pro: false },
+      { name: "Blank Page", path: "/blank", pro: false },
+      { name: "404 Error", path: "/error-404", pro: false },
     ],
   },
   {
-    name: 'Settings',
+    name: "Settings",
     icon: <SettingsIcon />,
-    path: '/settings',
+    path: "/settings",
   },
 ];
 
@@ -411,7 +410,6 @@ const AppSidebar: React.FC = () => {
             </div>
           </div>
         </nav>
-        {isExpanded || isHovered || isMobileOpen ? <SidebarWidget /> : null}
       </div>
     </aside>
   );
