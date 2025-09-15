@@ -8,7 +8,6 @@ type IProps = {
   orderProducts: IOrderProduct[];
 };
 const ProductItem = ({ orderProducts }: IProps) => {
-  console.log(orderProducts[0].product.thumbnail);
   const settings = {
     dots: false,
     infinite: true,
@@ -27,7 +26,7 @@ const ProductItem = ({ orderProducts }: IProps) => {
             <div className="flex gap-1">
               <div className="h-[40px] w-[30px] sm:h-[50px] sm:w-[50px] overflow-hidden rounded-md">
                 <img
-                  src={`${API_URL}/images/products/${product.product.thumbnail}`}
+                  src={`${API_URL}/images/products/${product?.product?.thumbnail}`}
                   className="h-full w-full object-cover"
                   alt={product.product.name}
                 />

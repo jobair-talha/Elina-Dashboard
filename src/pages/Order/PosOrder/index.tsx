@@ -1,61 +1,24 @@
+import { use, useEffect, useState } from "react";
 import PageBreadcrumb from "../../../components/common/PageBreadCrumb";
 import PageMeta from "../../../components/common/PageMeta";
 import Input from "../../../components/form/input/InputField";
 import TextArea from "../../../components/form/input/TextArea";
+import { useProducts } from "../../../services/queries/product";
 import ProductCard from "./_components/productCard";
-
-const products = [
-  {
-    id: 1,
-    name: "𝐉𝐑 𝟐𝟎𝟏𝟖 𝐂𝐡𝐚𝐫𝐠𝐞𝐫 𝐅𝐚𝐧 𝐰𝐢...",
-    price: 800,
-    originalPrice: 1290,
-    discount: "37.98%",
-    image: "https://api.dokanghar.com/public/product/VmKUdo3ZwBTTH60ZfFc.jpg",
-  },
-  {
-    id: 2,
-    name: "SPRAY GUN BATTERY-48 V",
-    price: 600,
-    originalPrice: 900,
-    discount: "33.33%",
-    image: "https://api.dokanghar.com/public/product/0DWECLPyopg86cfjhUQ.jpg",
-  },
-  {
-    id: 3,
-    name: "SUPER POWER TORCH LIGHT...",
-    price: 1130,
-    originalPrice: 1590,
-    discount: "28.93%",
-    image: "https://api.dokanghar.com/public/product/SumJDV_mRlvtFsjq-Zs.jpg",
-  },
-  {
-    id: 1,
-    name: "𝐉𝐑 𝟐𝟎𝟏𝟖 𝐂𝐡𝐚𝐫𝐠𝐞𝐫 𝐅𝐚𝐧 𝐰𝐢...",
-    price: 800,
-    originalPrice: 1290,
-    discount: "37.98%",
-    image: "https://api.dokanghar.com/public/product/VmKUdo3ZwBTTH60ZfFc.jpg",
-  },
-  {
-    id: 2,
-    name: "SPRAY GUN BATTERY-48 V",
-    price: 600,
-    originalPrice: 900,
-    discount: "33.33%",
-    image: "https://api.dokanghar.com/public/product/0DWECLPyopg86cfjhUQ.jpg",
-  },
-  {
-    id: 3,
-    name: "SUPER POWER TORCH LIGHT...",
-    price: 1130,
-    originalPrice: 1590,
-    discount: "28.93%",
-    image: "https://api.dokanghar.com/public/product/SumJDV_mRlvtFsjq-Zs.jpg",
-  },
-];
+import SmallPagination from "../../../components/pagination/smallPagination";
 
 export default function PosOrderPage() {
+  const [search, setSearch] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  let limit = 9;
+  const { data: products } = useProducts({
+    searchTerm: search,
+    limit,
+    page: currentPage,
+  });
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
   return (
     <>
       <PageMeta
@@ -66,7 +29,7 @@ export default function PosOrderPage() {
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 p-4">
         {/* Left Section - Product Search & List */}
         <div>
-          <div className="rounded-sm border border-gray-200 shadow-default dark:border-gray-800 dark:bg-white/[0.03]">
+          <div className="rounded-sm border border-gray-200 bg-white shadow-default dark:border-gray-800 dark:bg-white/[0.03]">
             <div className="border-b border-gray-200 px-6.5 py-4 dark:border-gray-800">
               <h3 className="font-medium text-black dark:text-white">
                 Product Information
@@ -74,15 +37,25 @@ export default function PosOrderPage() {
             </div>
             <div className="my-4.5 px-3">
               <input
+                onChange={(e) => setSearch(e.target.value)}
+                value={search}
                 placeholder="Search products by name or SKU"
                 className="w-full rounded border border-gray-200 dark:border-gray-800 px-5 py-3 dark:bg-form-input dark:text-white"
                 type="text"
               />
             </div>
             <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-2 px-2 pb-4">
-              {products.map((product) => (
+              {products?.data.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
+            </div>
+            <div className="my-4.5 px-3 text-center">
+              <SmallPagination
+                totalItems={products?.meta?.total || 0}
+                currentPage={currentPage}
+                limit={limit}
+                onPageChange={handlePageChange}
+              />
             </div>
           </div>
         </div>
