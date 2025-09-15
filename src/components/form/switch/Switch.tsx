@@ -7,6 +7,7 @@ interface SwitchProps {
   disabled?: boolean;
   onChange?: (checked: boolean) => void;
   color?: "blue" | "gray";
+ 
 }
 
 const Switch: React.FC<SwitchProps> = ({
@@ -16,6 +17,7 @@ const Switch: React.FC<SwitchProps> = ({
   disabled = false,
   onChange,
   color = "blue",
+  
 }) => {
   // internal state only used for uncontrolled
   const [internalChecked, setInternalChecked] = useState(defaultChecked);
@@ -63,7 +65,7 @@ const Switch: React.FC<SwitchProps> = ({
       }`}
       onClick={handleToggle}
     >
-      <div className="relative">
+      <div className="relative mt-2">
         <div
           className={`block transition duration-150 ease-linear h-6 w-11 rounded-full ${
             disabled

@@ -30,6 +30,15 @@ import CreateSlider from "./pages/slider/create";
 import UpdateSlider from "./pages/slider/update";
 import UpdateCategory from "./pages/Category/update";
 import UpdateProductPage from "./pages/products/update";
+import SupplierList from "./pages/Supplier";
+import CreateSupplier from "./pages/Supplier/create";
+import UpdateSupplier from "./pages/Supplier/update";
+import AttributeList from "./pages/Attributes/attribute";
+import CreateAttribute from "./pages/Attributes/attribute/create";
+import UpdateAttribute from "./pages/Attributes/attribute/update";
+import AttributeValueList from "./pages/Attributes/value";
+import CreateAttributeValue from "./pages/Attributes/value/create";
+import UpdateAttributeValue from "./pages/Attributes/value/update";
 
 export default function App() {
   return (
@@ -62,6 +71,29 @@ export default function App() {
             <Route path="/slider-list" element={<SliderList />} />
             <Route path="/new-slider" element={<CreateSlider />} />
             <Route path="/update-slider/:id" element={<UpdateSlider />} />
+            
+            {/* Supplier Route */}
+            <Route path="/supplier-list" element={<SupplierList />} />
+            <Route path="/new-supplier" element={<CreateSupplier />} />
+            <Route path="/update-supplier/:id" element={<UpdateSupplier />} />
+
+            {/* Attribute  */}
+
+            <Route path="/attribute-list" element={<AttributeList />} />
+            <Route path="/create-attribute" element={<CreateAttribute />} />
+            <Route path="/update-attribute/:id" element={<UpdateAttribute />} />
+
+            {/* Attribute value  */}
+
+            <Route path="/attribute-value-list" element={<AttributeValueList />} />
+            <Route
+              path="/create-attribute-value"
+              element={<CreateAttributeValue />}
+            />
+            <Route
+              path="/update-attribute-value/:id"
+              element={<UpdateAttributeValue />}
+            />
 
             {/* Settings Page */}
             <Route path="/settings" element={<SiteSettings />} />
